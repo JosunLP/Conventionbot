@@ -44,7 +44,6 @@ export default class DiscordService {
 		buyers.forEach((buyer: { discord: string; name: string }) => {
 			message = message.replaceAll("{{name}}", buyer.name);
 
-			// get the discord user from buyer and send them a message
 			const user = this.client.users.createDM(buyer.discord);
 			user.then((user) => {
 				user.send(message).catch(() => {
