@@ -36,7 +36,7 @@ export default class DiscordService {
 	public sendMessagesToBuyers() {
 		const config = this.configService.getConfig();
 		const buyers = JSON.parse(
-			fs.readFileSync("./config/buyers.json", "utf8"),
+			fs.readFileSync("./dist/config/buyers.json", "utf8"),
 		);
 
 		let message = config.messages.buyer;
@@ -45,11 +45,13 @@ export default class DiscordService {
 			message = message.replaceAll("{{name}}", buyer.name);
 
 			// get the discord user from buyer and send them a message
-			const user = this.client.users.cache.get(buyer.discord);
-			user?.send(message).catch(() => {
-				Cli.log(
-					`Failed to send message to ${buyer.name} (${buyer.discord})`,
-				);
+			const user = this.client.users.createDM(buyer.discord);
+			user.then((user) => {
+				user.send(message).catch(() => {
+					Cli.log(
+						`Failed to send message to ${buyer.name} (${buyer.discord})`,
+					);
+				});
 			});
 		});
 	}
