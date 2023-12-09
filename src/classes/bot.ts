@@ -4,10 +4,6 @@ export default class HydeBot {
 	private cli = Cli.getInstance();
 
 	constructor() {
-		this.start();
-	}
-
-	public async start() {
-		await this.cli.start();
+		this.cli.start();
 	}
 }

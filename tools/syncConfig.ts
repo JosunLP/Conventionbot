@@ -1,9 +1,15 @@
 import * as fs from "fs";
+import * as dotenv from "dotenv";
+
+if (!fs.existsSync("./.env")) {
+	console.error("No .env file found");
+	fs.writeFileSync("./.env", "APP_ID=\nAPP_PUBLIC_KEY=\n");
+}
+
+dotenv.config();
 
 const pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
-const config = JSON.parse(
-	fs.readFileSync("./src/config/default.config.json", "utf8"),
-);
+const config = JSON.parse(fs.readFileSync("./src/config/config.json", "utf8"));
 
 config.meta.name = pkg.name;
 config.meta.version = pkg.version;
@@ -16,17 +22,26 @@ config.meta.license = pkg.license;
 // config.meta.homepage = pkg.homepage;
 // config.meta.bugs = pkg.bugs.url;
 
-fs.writeFileSync(
-	"./src/config/default.config.json",
-	JSON.stringify(config, null, 2),
-);
+fs.writeFileSync("./src/config/config.json", JSON.stringify(config, null, 2));
 
 // ensure that the dist folder exists
 if (!fs.existsSync("./dist/config")) {
 	fs.mkdirSync("./dist/config");
 }
 
-fs.copyFileSync(
-	"./src/config/default.config.json",
-	"./dist/config/default.config.json",
+fs.copyFileSync("./src/config/config.json", "./dist/config/config.json");
+
+const distConfig = JSON.parse(
+	fs.readFileSync("./dist/config/config.json", "utf8"),
+);
+
+distConfig.secrets = {};
+
+distConfig.secrets.app_id = process.env.APP_ID;
+distConfig.secrets.app_public_key = process.env.APP_PUBLIC_KEY;
+distConfig.secrets.app_token = process.env.APP_TOKEN;
+
+fs.writeFileSync(
+	"./dist/config/config.json",
+	JSON.stringify(distConfig, null, 2),
 );

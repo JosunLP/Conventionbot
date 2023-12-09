@@ -20,8 +20,10 @@ export default class Cli {
 		}
 	}
 
-	public static async getInput() {
+	public static async getInput(): Promise<string> {
 		return new Promise<string>((resolve) => {
+			this.renderLine();
+			console.log("Enter a command:");
 			const stdin = process.openStdin();
 			stdin.addListener("data", (data) => {
 				const input = data.toString().trim();
@@ -32,10 +34,10 @@ export default class Cli {
 
 	public static async handleInput(input: string) {
 		switch (input) {
-			case "help":
+			case "!help":
 				Cli.renderHelp();
 				break;
-			case "exit":
+			case "!exit":
 				Cli.renderExit();
 				this.instance.isRunning = false;
 				process.exit(0);
@@ -48,13 +50,16 @@ export default class Cli {
 
 	public static renderHeader() {
 		console.log("HydeBot v0.0.1");
-		console.log("Type 'help' for a list of commands.");
+		console.log("Running in CLI mode.");
+		this.renderSpacers();
+		console.log("Type '!help' for a list of commands.");
 	}
 
 	public static renderHelp() {
+		this.renderSpacers();
 		console.log("Available commands:");
-		console.log("help");
-		console.log("exit");
+		console.log("!help");
+		console.log("!exit");
 	}
 
 	public static renderExit() {
@@ -68,5 +73,17 @@ export default class Cli {
 	public static renderError(error: Error) {
 		console.log("An error occured:");
 		console.log(error);
+	}
+
+	public static renderSpacers() {
+		console.log("\n");
+	}
+
+	public static renderLine() {
+		console.log("--------------------------------------------------");
+	}
+
+	public static renderDivider() {
+		console.log("==================================================");
 	}
 }
