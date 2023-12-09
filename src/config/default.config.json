@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "name": "hydebot",
+    "version": "0.0.1",
+    "description": "A bot to handle registration and questions to the german HYDE convention",
+    "contributors": [
+      {
+        "name": "Jonas Pfalzgraf",
+        "email": "info@josunlp.de"
+      }
+    ],
+    "license": "MIT"
+  }
+}
