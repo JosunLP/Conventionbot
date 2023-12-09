@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 if (!fs.existsSync("./.env")) {
 	console.error("No .env file found");
-	fs.writeFileSync("./.env", "APP_ID=\nAPP_PUBLIC_KEY=\n");
+	fs.writeFileSync("./.env", "APP_ID=\nAPP_PUBLIC_KEY=\nAPP_TOKEN=\n");
 }
 
 dotenv.config();
