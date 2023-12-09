@@ -1,0 +1,26 @@
+{
+  "name": "hydebot",
+  "version": "0.0.1",
+  "description": "A bot to handle registration and questions to the german HYDE convention",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "HYDE",
+    "nodejs",
+    "discord"
+  ],
+  "author": "Jonas Pfalzgraf <info@josunlp.de>",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "typescript": "^5.3.3",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "ts-node": "^10.9.1"
+  }
+}
