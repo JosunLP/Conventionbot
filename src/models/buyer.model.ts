@@ -1,5 +1,4 @@
 export class Buyer {
-
 	public name: string;
 	public discord: string;
 

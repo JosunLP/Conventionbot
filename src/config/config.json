@@ -1,14 +1,11 @@
 {
-	"meta": {
-		"name": "hydebot",
-		"version": "0.0.1",
-		"description": "A bot to handle registration and questions to the german HYDE convention",
-		"contributors": [
-			{
-				"name": "Jonas Pfalzgraf",
-				"email": "info@josunlp.de"
-			}
-		],
-		"license": "MIT"
-	}
+  "meta": {
+    "name": "hydebot",
+    "version": "0.0.1",
+    "description": "A bot to handle registration and questions to the german HYDE convention",
+    "license": "MIT"
+  },
+  "messages": {
+    "buyer": "Yaaaaaay, {{name}} you nearly made it! Well done filling out the registration form! 🥳\n\nTo fully confirm, we ask you to pay a deposit of at least 50 Euros over Paypal as soon as possible. \n\n💸 Link: https://www.paypal.me/hypnoeventsEU\nOf course you can also directly pay the full price, which is 210 Euros.\nPlease be aware that payments from outside the EU will cost you some fees, and that several payments might means higher fees\nPlease send the money via “Friends & Family” which will save us money that we can spend for nicer things\nYou can read more about our refund & cancellation policy here: https://hypnoevents.eu/refund-cancellation-policy/\nPlease let @NotReallySecretSab know if your Paypal name differs from your Discord name so that we can match the payments correctly\n\nFull payment is due on Fri, 5. January at the latest as we have to pay the rent for the venue then. If you don’t pay on time, you can’t participate. \n\nIf Sabrina or I know you, that’s all for now. If not, we need an age verification. If you have a friend who can vouch for you, please let us know. \nIf not, we ask you to share a picture of you with your face and your ID. We only need to see the picture on your ID and your date of birth, you’re welcome to make the rest unrecognizable. \nWe’ll delete the picture immediately after checking it. Your registration is only valid after that. \n\nFurther news we’ll spread via the server. Stay tuned!"
+  }
 }
