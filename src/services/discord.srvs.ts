@@ -7,7 +7,16 @@ export default class DiscordService {
 	private static instance: DiscordService;
 
 	private configService = ConfigService.getInstance();
-	private client = new Client({ intents: [GatewayIntentBits.Guilds] });
+	private client = new Client({
+		intents: [
+			GatewayIntentBits.Guilds,
+			GatewayIntentBits.DirectMessages,
+			GatewayIntentBits.GuildMembers,
+			GatewayIntentBits.GuildMessages,
+			GatewayIntentBits.GuildMessageReactions,
+			GatewayIntentBits.DirectMessageReactions,
+		],
+	});
 
 	private constructor() {
 		this.connect().catch((err) => {
@@ -44,12 +53,17 @@ export default class DiscordService {
 		buyers.forEach((buyer: { discord: string; name: string }) => {
 			message = message.replaceAll("{{name}}", buyer.name);
 
-			const user = this.client.users.createDM(buyer.discord);
-			user.then((user) => {
-				user.send(message).catch(() => {
-					Cli.log(
-						`Failed to send message to ${buyer.name} (${buyer.discord})`,
-					);
+			this.client.guilds.fetch().then((guilds) => {
+				guilds.forEach((guild) => {
+					guild.fetch().then((guild) => {
+						guild.members.fetch().then((members) => {
+							members.forEach((member) => {
+								if (member.user.tag === buyer.discord) {
+									member.send(message);
+								}
+							});
+						});
+					});
 				});
 			});
 		});

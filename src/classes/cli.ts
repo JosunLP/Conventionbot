@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import DiscordService from "../services/discord.srvs.js";
 
 export default class Cli {
@@ -42,6 +43,7 @@ export default class Cli {
 
 	private constructor() {
 		this.isRunning = true;
+		this.registerSlashCommands();
 	}
 
 	public static getInstance() {
@@ -85,6 +87,20 @@ export default class Cli {
 		} else {
 			this.renderUnknownCommand();
 		}
+	}
+
+	private registerSlashCommands() {
+		this.commands.forEach((command) => {
+			const slashCommand = new SlashCommandBuilder()
+				.setName(command.command)
+				.setDescription(command.description);
+			this.discordService
+				.getClient()
+				.application?.commands.create(slashCommand)
+				.catch((err) => {
+					console.error(err);
+				});
+		});
 	}
 
 	public static renderHeader() {
