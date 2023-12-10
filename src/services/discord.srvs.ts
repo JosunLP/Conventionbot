@@ -1,12 +1,15 @@
 import { Client, GatewayIntentBits } from "discord.js";
 import ConfigService from "./config.srvs.js";
-import Cli from "../classes/cli.js";
-import * as fs from "fs";
+import Cli from "./cli.srvs.js";
+import BuyerService from "./buyer.srvs.js";
+import { Buyer } from "../types/buyer.type.js";
 
 export default class DiscordService {
 	private static instance: DiscordService;
 
 	private configService = ConfigService.getInstance();
+	private buyerService = BuyerService.getInstance();
+
 	private client = new Client({
 		intents: [
 			GatewayIntentBits.Guilds,
@@ -44,13 +47,11 @@ export default class DiscordService {
 
 	public sendMessagesToBuyers() {
 		const config = this.configService.getConfig();
-		const buyers = JSON.parse(
-			fs.readFileSync("./dist/config/buyers.json", "utf8"),
-		);
+		const buyers = this.buyerService.getBuyers();
 
 		let message = config.messages.buyer;
 
-		buyers.forEach((buyer: { discord: string; name: string }) => {
+		buyers.forEach((buyer: Buyer) => {
 			message = message.replaceAll("{{name}}", buyer.name);
 
 			this.client.guilds.fetch().then((guilds) => {

@@ -1,15 +1,16 @@
-import Cli from "../classes/cli.js";
+import Cli from "./cli.srvs.js";
 import { Buyer } from "../types/buyer.type.js";
 import { WebSocketServer } from "ws";
 
 export default class BuyerService {
 	private static instance: BuyerService;
 	private buyers = [] as Buyer[];
-	private wss = new WebSocketServer({ port: 8080, path: "/buyers" });
+	private wss = new WebSocketServer({ port: 8080 });
 
 	private constructor() {
 		Cli.log("BuyerService initialized");
 		this.wss.on("connection", (ws) => {
+			Cli.log("Buyer connected to WebSocket");
 			ws.on("message", (message) => {
 				const buyer = this.checkIfObjectIsBuyer(
 					JSON.parse(message.toString()),
@@ -18,6 +19,7 @@ export default class BuyerService {
 					: null;
 				if (!buyer) return;
 				this.buyers.push(buyer);
+				Cli.log(`Buyer ${buyer.name} added`);
 			});
 		});
 	}

@@ -1,10 +1,12 @@
 import { SlashCommandBuilder } from "discord.js";
-import DiscordService from "../services/discord.srvs.js";
+import DiscordService from "./discord.srvs.js";
+import BuyerService from "./buyer.srvs.js";
 
 export default class Cli {
 	private static instance: Cli;
 	private isRunning = false;
 	private discordService = DiscordService.getInstance();
+	private buyerService = BuyerService.getInstance();
 	private commands = [
 		{
 			command: "help",
@@ -37,6 +39,18 @@ export default class Cli {
 			description: "Sends a message to all buyers.",
 			execute: () => {
 				this.discordService.sendMessagesToBuyers();
+			},
+		},
+		{
+			command: "list-buyers",
+			description: "Lists all buyers.",
+			execute: () => {
+				const buyers = this.buyerService.getBuyers();
+				if (buyers.length === 0) {
+					console.log("No buyers found.");
+					return;
+				}
+				Cli.renderObjectList(buyers);
 			},
 		},
 	];
@@ -143,6 +157,13 @@ export default class Cli {
 	public static renderList(list: string[]) {
 		list.forEach((item) => {
 			console.log(" - " + item);
+		});
+		this.renderSpacers();
+	}
+
+	public static renderObjectList(list: object[]) {
+		list.forEach((item) => {
+			console.log(" - " + JSON.stringify(item, null, 2));
 		});
 		this.renderSpacers();
 	}

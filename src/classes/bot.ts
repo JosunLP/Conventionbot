@@ -1,6 +1,6 @@
 import BuyerService from "../services/buyer.srvs.js";
 import ConfigService from "../services/config.srvs.js";
-import Cli from "./cli.js";
+import Cli from "../services/cli.srvs.js";
 
 export default class HydeBot {
 	private cli = Cli.getInstance();
