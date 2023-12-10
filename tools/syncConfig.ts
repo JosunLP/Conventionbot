@@ -40,6 +40,8 @@ distConfig.secrets = {};
 distConfig.secrets.app_id = process.env.APP_ID;
 distConfig.secrets.app_public_key = process.env.APP_PUBLIC_KEY;
 distConfig.secrets.app_token = process.env.APP_TOKEN;
+distConfig.secrets.signature_key_private = process.env.SIGNATURE_KEY_PRIVATE;
+distConfig.secrets.signature_key_public = process.env.SIGNATURE_KEY_PUBLIC;
 
 fs.writeFileSync(
 	"./dist/config/config.json",

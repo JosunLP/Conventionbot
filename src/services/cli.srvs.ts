@@ -182,4 +182,15 @@ export default class Cli {
 		const timeStamp = new Date().toLocaleString();
 		console.log(timeStamp + ": " + message);
 	}
+
+	public static error(message: string, error: Error) {
+		const timeStamp = new Date().toLocaleString();
+		console.log(timeStamp + ": " + message);
+		console.log(error);
+	}
+
+	public static warn(message: string) {
+		const timeStamp = new Date().toLocaleString();
+		console.log(timeStamp + ": " + message);
+	}
 }

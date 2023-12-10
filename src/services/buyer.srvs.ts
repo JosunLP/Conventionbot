@@ -1,6 +1,8 @@
 import Cli from "./cli.srvs.js";
 import { Buyer } from "../types/buyer.type.js";
 import { WebSocketServer } from "ws";
+import { BuyerObject } from "../types/buyerObject.type.js";
+import Signer from "../classes/sign.js";
 
 export default class BuyerService {
 	private static instance: BuyerService;
@@ -8,16 +10,27 @@ export default class BuyerService {
 	private wss = new WebSocketServer({ port: 8080 });
 
 	private constructor() {
-		Cli.log("BuyerService initialized");
+		this.wss.on("error", (error) => {
+			Cli.error("Buyer WebSocket error", error);
+		});
 		this.wss.on("connection", (ws) => {
 			Cli.log("Buyer connected to WebSocket");
-			ws.on("message", (message) => {
+			ws.on("upgrade", () => {
+				Cli.log("Buyer WebSocket upgraded");
+			});
+			ws.on("message", (message: BuyerObject) => {
 				const buyer = this.checkIfObjectIsBuyer(
 					JSON.parse(message.toString()),
 				)
 					? JSON.parse(message.toString())
 					: null;
 				if (!buyer) return;
+
+				if (!Signer.verifySignature(buyer, buyer.sign)) {
+					Cli.error("Buyer signature is not valid", new Error());
+					return;
+				}
+
 				this.buyers.push(buyer);
 				Cli.log(`Buyer ${buyer.name} added`);
 			});
@@ -31,10 +44,11 @@ export default class BuyerService {
 		return this.instance;
 	}
 
-	private checkIfObjectIsBuyer(object: any): object is Buyer {
+	private checkIfObjectIsBuyer(object: any): object is BuyerObject {
 		return (
 			typeof object.discord === "string" &&
-			typeof object.name === "string"
+			typeof object.name === "string" &&
+			typeof object.sign === "string"
 		);
 	}
 

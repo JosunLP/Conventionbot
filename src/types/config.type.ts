@@ -12,6 +12,8 @@ export type Config = {
 		app_id: string;
 		app_public_key: string;
 		app_token: string;
+		signature_key_private: string;
+		signature_key_public: string;
 	};
 	messages: {
 		buyer: string;
