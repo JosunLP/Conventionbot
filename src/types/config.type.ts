@@ -18,4 +18,7 @@ export type Config = {
 	messages: {
 		buyer: string;
 	};
+	server: {
+		guild_id: string;
+	};
 };
