@@ -20,5 +20,6 @@ export type Config = {
 	};
 	server: {
 		guild_id: string;
+		max_buyers: number;
 	};
 };
