@@ -7,11 +7,13 @@
 	"scripts": {
 		"build": "rimraf ./dist && npm run lint && tsc --project ./tsconfig.json  && npm run tooling",
 		"lint": "eslint --ext .ts . --fix --cache && prettier --write .",
-		"start": "node dist/server.js",
+		"start": "npm run docker-build && docker-compose up",
 		"watch": "tsc --project ./tsconfig.json --watch && nodemon dist/server.js",
 		"tooling": "npm run tooling-build && npm run tooling-run",
 		"tooling-run": "node ./tools/syncConfig.js",
-		"tooling-build": "tsc --project ./tooling.tsconfig.json"
+		"tooling-build": "tsc --project ./tooling.tsconfig.json",
+		"docker-stop": "docker-compose down",
+		"docker-build": "docker build . -t hydebot"
 	},
 	"keywords": [
 		"HYDE",

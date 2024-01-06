@@ -4,9 +4,9 @@ import { SaveData } from "../types/saveData.type";
 import DataService from "../services/data.srvs";
 
 export default class Save {
-
 	private static savePath = path.join(__dirname, "../data");
-	private static fileName = crypto.randomUUID() + "_" + new Date().getFullYear() + "_data.json";
+	private static fileName =
+		crypto.randomUUID() + "_" + new Date().getFullYear() + "_data.json";
 
 	private static dataService = DataService.getInstance();
 

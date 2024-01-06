@@ -2,7 +2,6 @@
  * Csvimporter class
  */
 export default class CSVImporter {
-
 	/**
 	 * Imports CSV data into JSON
 	 * @param csvData CSV data as string

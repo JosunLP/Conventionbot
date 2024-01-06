@@ -1,4 +1,4 @@
-import { Client, Events, GatewayIntentBits, REST, Routes } from "discord.js";
+import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
 import ConfigService from "./config.srvs.js";
 import Cli from "./cli.srvs.js";
 import BuyerService from "./buyer.srvs.js";
@@ -31,30 +31,30 @@ export default class DiscordService {
 			process.exit(1);
 		});
 
-		this.registerSlahsCommands().catch((err) => {
-			console.error(err);
-			process.exit(1);
-		});
+		// this.registerSlahsCommands().catch((err) => {
+		// 	console.error(err);
+		// 	process.exit(1);
+		// });
 
-		this.client.on(Events.InteractionCreate, (interaction) => {
-			if (!interaction.isCommand()) return;
+		// this.client.on(Events.InteractionCreate, (interaction) => {
+		// 	if (!interaction.isCommand()) return;
 
-			//@ts-ignore
-			const command = this.client.commands.get(interaction.commandName);
+		// 	//@ts-ignore
+		// 	const command = this.client.commands.get(interaction.commandName);
 
-			if (!command) return;
+		// 	if (!command) return;
 
-			try {
-				command.execute(interaction);
-				Cli.log(`Command ${command.data.name} executed`);
-			} catch (error) {
-				console.error(error);
-				interaction.reply({
-					content: "There was an error while executing this command!",
-					ephemeral: true,
-				});
-			}
-		});
+		// 	try {
+		// 		command.execute(interaction);
+		// 		Cli.log(`Command ${command.data.name} executed`);
+		// 	} catch (error) {
+		// 		console.error(error);
+		// 		interaction.reply({
+		// 			content: "There was an error while executing this command!",
+		// 			ephemeral: true,
+		// 		});
+		// 	}
+		// });
 	}
 
 	public static getInstance() {

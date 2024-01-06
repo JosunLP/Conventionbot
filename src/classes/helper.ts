@@ -1,5 +1,4 @@
 export default class Helper {
-
 	/**
 	 * Sleeps helper
 	 * @param ms
