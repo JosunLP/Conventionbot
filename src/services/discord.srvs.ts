@@ -22,6 +22,13 @@ export default class DiscordService {
 			GatewayIntentBits.GuildMessages,
 			GatewayIntentBits.GuildMessageReactions,
 			GatewayIntentBits.DirectMessageReactions,
+			GatewayIntentBits.GuildVoiceStates,
+			GatewayIntentBits.GuildMessageTyping,
+			GatewayIntentBits.DirectMessageTyping,
+			GatewayIntentBits.GuildPresences,
+			GatewayIntentBits.GuildInvites,
+			GatewayIntentBits.GuildIntegrations,
+			GatewayIntentBits.GuildWebhooks,
 		],
 	});
 
@@ -80,7 +87,7 @@ export default class DiscordService {
 
 	private async registerSlahsCommands() {
 		//@ts-ignore
-		this.client.commands = [];
+		const commands = [];
 		const config = this.configService.getConfig();
 
 		const foldersPath = path.join(__dirname, "dist/commands");
@@ -99,14 +106,12 @@ export default class DiscordService {
 						`../commands/${folder}/${file}`
 					);
 
-					//@ts-ignore
-					this.client.commands.push(JSON.stringify(command.data));
+					commands.push(command.default.data.toJSON());
 				}
 			} else {
 				const command = await import(`../commands/${folder}`);
 
-				//@ts-ignore
-				this.client.commands.push(JSON.stringify(command.data));
+				commands.push(command.default.data.toJSON());
 			}
 		}
 
@@ -122,7 +127,7 @@ export default class DiscordService {
 						config.server.guild_id,
 					),
 					//@ts-ignore
-					{ body: this.client.commands },
+					{ body: commands },
 				);
 			} catch (error) {
 				console.error(error);
