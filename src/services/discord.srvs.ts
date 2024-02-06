@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
+import { Client, Events, GatewayIntentBits, REST, Routes } from "discord.js";
 import ConfigService from "./config.srvs.js";
 import Cli from "./cli.srvs.js";
 import BuyerService from "./buyer.srvs.js";
@@ -31,30 +31,30 @@ export default class DiscordService {
 			process.exit(1);
 		});
 
-		// this.registerSlahsCommands().catch((err) => {
-		// 	console.error(err);
-		// 	process.exit(1);
-		// });
+		this.registerSlahsCommands().catch((err) => {
+			console.error(err);
+			process.exit(1);
+		});
 
-		// this.client.on(Events.InteractionCreate, (interaction) => {
-		// 	if (!interaction.isCommand()) return;
+		this.client.on(Events.InteractionCreate, (interaction) => {
+			if (!interaction.isCommand()) return;
 
-		// 	//@ts-ignore
-		// 	const command = this.client.commands.get(interaction.commandName);
+			//@ts-ignore
+			const command = this.client.commands.get(interaction.commandName);
 
-		// 	if (!command) return;
+			if (!command) return;
 
-		// 	try {
-		// 		command.execute(interaction);
-		// 		Cli.log(`Command ${command.data.name} executed`);
-		// 	} catch (error) {
-		// 		console.error(error);
-		// 		interaction.reply({
-		// 			content: "There was an error while executing this command!",
-		// 			ephemeral: true,
-		// 		});
-		// 	}
-		// });
+			try {
+				command.execute(interaction);
+				Cli.log(`Command ${command.data.name} executed`);
+			} catch (error) {
+				console.error(error);
+				interaction.reply({
+					content: "There was an error while executing this command!",
+					ephemeral: true,
+				});
+			}
+		});
 	}
 
 	public static getInstance() {
@@ -74,6 +74,10 @@ export default class DiscordService {
 		await this.client.login(config.secrets.app_token);
 	}
 
+	private isPathFileOrFolder(path: string) {
+		return fs.lstatSync(path).isDirectory();
+	}
+
 	private async registerSlahsCommands() {
 		//@ts-ignore
 		this.client.commands = [];
@@ -83,12 +87,23 @@ export default class DiscordService {
 		const commandFolders = fs.readdirSync(foldersPath);
 
 		for (const folder of commandFolders) {
-			const commandFiles = fs
-				.readdirSync(`${foldersPath}/${folder}`)
-				.filter((file) => file.endsWith(".command.js"));
+			const path = `${foldersPath}/${folder}`;
 
-			for (const file of commandFiles) {
-				const command = await import(`../commands/${folder}/${file}`);
+			if (!fs.lstatSync(path).isFile()) {
+				const commandFiles = fs
+					.readdirSync(`${foldersPath}/${folder}`)
+					.filter((file) => file.endsWith(".command.js"));
+
+				for (const file of commandFiles) {
+					const command = await import(
+						`../commands/${folder}/${file}`
+					);
+
+					//@ts-ignore
+					this.client.commands.push(JSON.stringify(command.data));
+				}
+			} else {
+				const command = await import(`../commands/${folder}`);
 
 				//@ts-ignore
 				this.client.commands.push(JSON.stringify(command.data));

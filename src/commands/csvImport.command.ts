@@ -3,7 +3,7 @@ import { SlashCommandBuilder } from "discord.js";
 
 export default {
 	data: new SlashCommandBuilder()
-		.setName("scvImport")
+		.setName("csvimport")
 		.setDescription(
 			"Imports A CSV file, and converts it to JSON. Then it add the data to the data list.",
 		),

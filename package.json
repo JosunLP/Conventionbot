@@ -1,5 +1,5 @@
 {
-	"name": "hydebot",
+	"name": "hydebot-server",
 	"version": "0.0.1",
 	"description": "A bot to handle registration and questions to the german HYDE convention",
 	"main": "./dist/server.js",
@@ -13,7 +13,7 @@
 		"tooling-run": "node ./tools/syncConfig.js",
 		"tooling-build": "tsc --project ./tooling.tsconfig.json",
 		"docker-stop": "docker-compose down",
-		"docker-build": "docker build . -t hydebot"
+		"docker-build": "docker build . -t hydebot-server"
 	},
 	"keywords": [
 		"HYDE",

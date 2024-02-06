@@ -1,6 +1,6 @@
 version: "3"
 services:
-  hydebot:
+  hydebot-server:
     container_name: hydebot-server
     image: hydebot-server
     restart: always
@@ -34,7 +34,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
-      MONGO_INITDB_DATABASE: hydebot
+      MONGO_INITDB_DATABASE: hydebot-server
     networks:
       - hydebot-network
 
