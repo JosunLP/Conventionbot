@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { SlashCommandBuilder } from "discord.js";
+import CSVImporter from "../classes/csv.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -29,13 +30,23 @@ export default {
 		deferReply: (arg0: { ephemeral: boolean }) => any;
 		editReply: (arg0: any) => any;
 	}) {
-		async function handleUpload(attachment: {
+		async function handleUpload<T>(attachment: {
 			attachment: string | URL | Request;
 		}) {
-			const response = await fetch(attachment.attachment);
+			//@ts-ignore
+			const url = attachment.attachment.attachment;
+			const response = await fetch(url);
 			const data = await response.text();
+			let result: [] | {} | T;
 
-			return data.trim().split("\n");
+			result = JSON.parse(data) as T;
+
+			//@ts-ignore
+			if (attachment.attachment.name.endsWith(".csv")) {
+				result = CSVImporter.importCSV<T>(data);
+			}
+
+			return result;
 		}
 
 		await interaction.deferReply({ ephemeral: true });
@@ -46,17 +57,11 @@ export default {
 		const category = interaction.options.get("category");
 
 		// Check if the file is a csv
-		if (file.attachment.name.endsWith(".csv") && category.value === "csv") {
-			const data = await handleUpload(file);
-			console.log(JSON.stringify(data));
-
-			await interaction.editReply(file.attachment.name + " imported");
-		}
-
-		// Check if the file is a json
 		if (
-			file.attachment.name.endsWith(".json") &&
-			category.value === "json"
+			(file.attachment.name.endsWith(".csv") &&
+				category.value === "csv") ||
+			(file.attachment.name.endsWith(".json") &&
+				category.value === "json")
 		) {
 			const data = await handleUpload(file);
 			console.log(JSON.stringify(data));

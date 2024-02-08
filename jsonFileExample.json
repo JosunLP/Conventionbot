@@ -1,0 +1,21 @@
+{
+	"name": "file",
+	"type": 11,
+	"value": "1205097229426106378",
+	"attachment": {
+		"attachment": "https://cdn.discordapp.com/ephemeral-attachments/1204945409605115904/1205097229426106378/silver_grey_black.json?ex=65d72141&is=65c4ac41&hm=cc9f8741fad5ad428adf4b8551d684d10e8179600dc9f0f82908f490fa12b92d&",
+		"name": "silver_grey_black.json",
+		"id": "1205097229426106378",
+		"size": 314,
+		"url": "https://cdn.discordapp.com/ephemeral-attachments/1204945409605115904/1205097229426106378/silver_grey_black.json?ex=65d72141&is=65c4ac41&hm=cc9f8741fad5ad428adf4b8551d684d10e8179600dc9f0f82908f490fa12b92d&",
+		"proxyURL": "https://media.discordapp.net/ephemeral-attachments/1204945409605115904/1205097229426106378/silver_grey_black.json?ex=65d72141&is=65c4ac41&hm=cc9f8741fad5ad428adf4b8551d684d10e8179600dc9f0f82908f490fa12b92d&",
+		"height": null,
+		"width": null,
+		"contentType": "application/json; charset=utf-8",
+		"description": null,
+		"ephemeral": true,
+		"duration": null,
+		"waveform": null,
+		"flags": 0
+	}
+}

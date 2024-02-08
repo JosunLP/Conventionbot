@@ -13,7 +13,8 @@
 		"tooling-run": "node ./tools/syncConfig.js",
 		"tooling-build": "tsc --project ./tooling.tsconfig.json",
 		"docker-stop": "docker-compose down",
-		"docker-build": "docker build . -t hydebot-server"
+		"docker-build": "npm run docker-prune && docker build . -t hydebot-server",
+		"docker-prune": "docker image prune -f"
 	},
 	"keywords": [
 		"HYDE",
