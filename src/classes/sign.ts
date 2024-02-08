@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import { Buyer } from "../types/buyer.type";
-import { BuyerObject } from "../types/buyerObject.type";
+import { BuyerObject } from "../interfaces/buyerObject.interface";
 import ConfigService from "../services/config.srvs.js";
+import Buyer from "../models/buyer.model";
 
 export default class Signer {
 	constructor() {}

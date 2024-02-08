@@ -2,9 +2,9 @@ import { Client, Events, GatewayIntentBits, REST, Routes } from "discord.js";
 import ConfigService from "./config.srvs.js";
 import Cli from "./cli.srvs.js";
 import BuyerService from "./buyer.srvs.js";
-import { Buyer } from "../types/buyer.type.js";
 import * as fs from "fs";
 import * as path from "path";
+import Buyer from "../models/buyer.model.js";
 
 const __dirname = path.resolve();
 

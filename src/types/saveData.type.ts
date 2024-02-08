@@ -1,4 +1,4 @@
-import { Buyer } from "./buyer.type";
+import Buyer from "../models/buyer.model";
 
 export type SaveData = {
 	id: string;

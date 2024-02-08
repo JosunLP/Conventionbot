@@ -1,4 +1,4 @@
-import { Buyer } from "../types/buyer.type";
+import Buyer from "../models/buyer.model";
 
 export default class DataService {
 	private static instance: DataService;

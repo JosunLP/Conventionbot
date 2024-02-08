@@ -1,8 +1,8 @@
 import Cli from "./cli.srvs.js";
-import { Buyer } from "../types/buyer.type.js";
 import { WebSocketServer } from "ws";
-import { BuyerObject } from "../types/buyerObject.type.js";
+import { BuyerObject } from "../interfaces/buyerObject.interface.js";
 import Signer from "../classes/sign.js";
+import Buyer from "../models/buyer.model.js";
 
 export default class BuyerService {
 	private static instance: BuyerService;
