@@ -13,6 +13,8 @@ export default class DiscordService {
 
 	private configService = ConfigService.getInstance();
 	private buyerService = BuyerService.getInstance();
+	private commandsJson: any[] = [];
+	private commands: any[] = [];
 
 	private client = new Client({
 		intents: [
@@ -43,13 +45,19 @@ export default class DiscordService {
 			process.exit(1);
 		});
 
-		this.client.on(Events.InteractionCreate, (interaction) => {
+		this.client.on(Events.InteractionCreate, async (interaction) => {
 			if (!interaction.isCommand()) return;
 
-			//@ts-ignore
-			const command = this.client.commands.get(interaction.commandName);
+			const command = this.commands.find(
+				(command) => command.data.name === interaction.commandName,
+			);
 
-			if (!command) return;
+			if (!command) {
+				console.error(
+					`No command matching ${interaction.commandName} was found.`,
+				);
+				return;
+			}
 
 			try {
 				command.execute(interaction);
@@ -78,7 +86,9 @@ export default class DiscordService {
 	private async connect() {
 		const config = this.configService.getConfig();
 		Cli.log("Connecting to Discord...");
-		await this.client.login(config.secrets.app_token);
+		await this.client.login(config.secrets.app_token).then(() => {
+			Cli.log("Connected to Discord!");
+		});
 	}
 
 	private isPathFileOrFolder(path: string) {
@@ -86,9 +96,9 @@ export default class DiscordService {
 	}
 
 	private async registerSlahsCommands() {
-		//@ts-ignore
-		const commands = [];
 		const config = this.configService.getConfig();
+		this.commands = [];
+		this.commandsJson = [];
 
 		const foldersPath = path.join(__dirname, "dist/commands");
 		const commandFolders = fs.readdirSync(foldersPath);
@@ -106,12 +116,14 @@ export default class DiscordService {
 						`../commands/${folder}/${file}`
 					);
 
-					commands.push(command.default.data.toJSON());
+					this.commandsJson.push(command.default.data.toJSON());
+					this.commands.push(command.default);
 				}
 			} else {
 				const command = await import(`../commands/${folder}`);
 
-				commands.push(command.default.data.toJSON());
+				this.commandsJson.push(command.default.data.toJSON());
+				this.commands.push(command.default);
 			}
 		}
 
@@ -127,7 +139,7 @@ export default class DiscordService {
 						config.server.guild_id,
 					),
 					//@ts-ignore
-					{ body: commands },
+					{ body: this.commandsJson },
 				);
 			} catch (error) {
 				console.error(error);
