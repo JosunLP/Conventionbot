@@ -7,9 +7,9 @@ The goal of this project is to create a Discord bot that can be used to manage t
 
 To run HYDEbot, you will need the following:
 
-- [Node.js](https://nodejs.org/en/) (v14.17.0 or higher)
-- [npm](https://www.npmjs.com/) (v6.14.13 or higher)
-- [Docker](https://www.docker.com/) (v20.10.7 or higher)
+- [Node.js](https://nodejs.org/en/) (v20.11.0 or higher)
+- [npm](https://www.npmjs.com/) (v10.2.4 or higher)
+- [Docker](https://www.docker.com/) (v25.0.2 or higher)
 
 ## Installation
 
