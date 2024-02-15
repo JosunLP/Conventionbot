@@ -1,5 +1,5 @@
 export type BaseBuyer = {
-	id: string;
+	Id: string;
 	discord: string;
 	name: string;
 	email: string;

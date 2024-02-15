@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { SlashCommandBuilder } from "discord.js";
 import CSVImporter from "../classes/csv.js";
+import Buyer from "../models/buyer.model.js";
+import DataService from "../services/data.srvs.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -49,6 +51,8 @@ export default {
 			return result;
 		}
 
+		const dataService = DataService.getInstance();
+
 		await interaction.deferReply({ ephemeral: true });
 
 		//@ts-ignore
@@ -63,8 +67,32 @@ export default {
 			(file.attachment.name.endsWith(".json") &&
 				category.value === "json")
 		) {
-			const data = await handleUpload(file);
-			console.log(JSON.stringify(data));
+			const data = (await handleUpload(file)) as Buyer[];
+
+			// check if the data is an array
+			if (!Array.isArray(data)) {
+				await interaction.editReply("The data must be an array");
+				return;
+			}
+
+			// check if the data is empty
+			if (data.length === 0) {
+				await interaction.editReply("The data is empty");
+				return;
+			}
+
+			// check if the data is an array of buyers
+			if (!data.every((buyer) => Buyer.check(buyer))) {
+				await interaction.editReply(
+					"The data must be an array of buyers",
+				);
+				return;
+			}
+
+			data.forEach((buyer) => {
+				const newBuyer = new Buyer(buyer);
+				dataService.addBuyer(newBuyer);
+			});
 
 			await interaction.editReply(file.attachment.name + " imported");
 		}

@@ -22,4 +22,11 @@ export type Config = {
 		guild_id: string;
 		max_buyers: number;
 	};
+	database: {
+		host: string;
+		username: string;
+		password: string;
+		databasename: string;
+		collections: string[];
+	};
 };

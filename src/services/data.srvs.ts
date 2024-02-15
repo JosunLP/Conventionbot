@@ -1,13 +1,13 @@
-import Buyer from "../models/buyer.model";
+import Buyer from "../models/buyer.model.js";
+import DatabaseService from "../services/database.srvs.js";
 
 export default class DataService {
 	private static instance: DataService;
+	private databaseService: DatabaseService = DatabaseService.getInstance();
 
-	private potentialBuyers: Buyer[] = [];
-
-	private waitingList: Buyer[] = [];
-
-	private buyers: Buyer[] = [];
+	private potentialBuyersLabel: string = "potentialBuyers";
+	private waitingListLabel: string = "waitingList";
+	private buyersLabel: string = "buyers";
 
 	private constructor() {}
 
@@ -18,55 +18,75 @@ export default class DataService {
 		return this.instance;
 	}
 
-	public getPotentialBuyers(): Buyer[] {
-		return this.potentialBuyers;
+	public getPotentialBuyers(): Buyer[] | Promise<Buyer[]> {
+		const buyers = this.databaseService
+			.listAllDocuments<Buyer>(this.potentialBuyersLabel)
+			.catch((err) => {
+				console.error(err);
+				return [];
+			});
+
+		return buyers;
 	}
 
-	public getWaitingList(): Buyer[] {
-		return this.waitingList;
+	public getWaitingList(): Buyer[] | Promise<Buyer[]> {
+		const buyers = this.databaseService
+			.listAllDocuments<Buyer>(this.waitingListLabel)
+			.catch((err) => {
+				console.error(err);
+				return [];
+			});
+
+		return buyers;
 	}
 
-	public getBuyers(): Buyer[] {
-		return this.buyers;
+	public getBuyers(): Buyer[] | Promise<Buyer[]> {
+		const buyers = this.databaseService
+			.listAllDocuments<Buyer>(this.waitingListLabel)
+			.catch((err) => {
+				console.error(err);
+				return [];
+			});
+
+		return buyers;
 	}
 
 	public addPotentialBuyer(buyer: Buyer) {
-		this.potentialBuyers.push(buyer);
+		this.databaseService.createDocument(this.potentialBuyersLabel, buyer);
 	}
 
 	public addWaitingList(buyer: Buyer) {
-		this.waitingList.push(buyer);
+		this.databaseService.createDocument(this.waitingListLabel, buyer);
 	}
 
 	public addBuyer(buyer: Buyer) {
-		this.buyers.push(buyer);
+		this.databaseService.createDocument(this.buyersLabel, buyer);
 	}
 
 	public removePotentialBuyer(buyer: Buyer) {
-		this.potentialBuyers = this.potentialBuyers.filter(
-			(b) => b.discord !== buyer.discord,
-		);
+		this.databaseService.deleteDocument(this.potentialBuyersLabel, buyer);
 	}
 
-	public removeWaitingList(buyer: Buyer) {
-		this.waitingList = this.waitingList.filter(
-			(b) => b.discord !== buyer.discord,
-		);
+	public removeWaitingListBuyer(buyer: Buyer) {
+		this.databaseService.deleteDocument(this.waitingListLabel, buyer);
 	}
 
 	public removeBuyer(buyer: Buyer) {
-		this.buyers = this.buyers.filter((b) => b.discord !== buyer.discord);
+		this.databaseService.deleteDocument(this.buyersLabel, buyer);
 	}
 
 	public clearPotentialBuyers() {
-		this.potentialBuyers = [];
+		this.databaseService.dropCollection(this.potentialBuyersLabel);
+		this.databaseService.createCollection(this.potentialBuyersLabel);
 	}
 
 	public clearWaitingList() {
-		this.waitingList = [];
+		this.databaseService.dropCollection(this.waitingListLabel);
+		this.databaseService.createCollection(this.waitingListLabel);
 	}
 
 	public clearBuyers() {
-		this.buyers = [];
+		this.databaseService.dropCollection(this.buyersLabel);
+		this.databaseService.createCollection(this.buyersLabel);
 	}
 }

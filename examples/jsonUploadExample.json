@@ -1,6 +1,16 @@
 [
 	{
 		"name": "John Doe",
-		"discord": "JohnDoe#1234"
+		"discord": "JohnDoe#1234",
+		"email": "JohnDoe@email.test",
+		"payed": true,
+		"verifyed": true
+	},
+	{
+		"name": "Jane Doe",
+		"discord": "JaneDoe#1234",
+		"email": "JaneDoe@email.test",
+		"payed": false,
+		"verifyed": false
 	}
 ]
