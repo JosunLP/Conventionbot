@@ -23,14 +23,22 @@ export default class Buyer implements BaseBuyer, IModel {
 		this.updatedAt = buyer.updatedAt || new Date();
 	}
 
-	public static check(
-		object: object,
-	): boolean {
+	public static check(object: object): boolean {
 		const keys = Object.keys(object);
-		const buyerKeys = Object.keys(this);
+		const buyerKeys = Object.keys(
+			new Buyer({
+				Id: "",
+				discord: "",
+				name: "",
+				email: "",
+				payed: false,
+				verifyed: false,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			}),
+		);
 
 		return keys.every((key) => {
-
 			if (key === "Id" || key === "createdAt" || key === "updatedAt") {
 				return true;
 			}

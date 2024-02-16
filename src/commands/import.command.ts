@@ -91,7 +91,7 @@ export default {
 
 			data.forEach((buyer) => {
 				const newBuyer = new Buyer(buyer);
-				dataService.addBuyer(newBuyer);
+				dataService.addPotentialBuyer(newBuyer);
 			});
 
 			await interaction.editReply(file.attachment.name + " imported");
