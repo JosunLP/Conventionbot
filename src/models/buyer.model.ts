@@ -1,3 +1,4 @@
+import { BuyerType } from "../enum/buyerType.enum";
 import { BuyerObject } from "../interfaces/buyerObject.interface";
 import { IModel } from "../interfaces/model.interface";
 import { BaseBuyer } from "../types/baseBuyer.type";
@@ -9,6 +10,7 @@ export default class Buyer implements BaseBuyer, IModel {
 	public email!: string;
 	public payed!: boolean;
 	public verifyed!: boolean;
+	public type!: BuyerType;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 
@@ -19,6 +21,7 @@ export default class Buyer implements BaseBuyer, IModel {
 		this.email = buyer.email;
 		this.payed = buyer.payed;
 		this.verifyed = buyer.verifyed;
+		this.type = buyer.type || BuyerType.POTENTIAL;
 		this.createdAt = buyer.createdAt || new Date();
 		this.updatedAt = buyer.updatedAt || new Date();
 	}
@@ -33,6 +36,7 @@ export default class Buyer implements BaseBuyer, IModel {
 				email: "",
 				payed: false,
 				verifyed: false,
+				type: BuyerType.POTENTIAL,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			}),

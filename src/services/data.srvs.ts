@@ -5,8 +5,6 @@ export default class DataService {
 	private static instance: DataService;
 	private databaseService: DatabaseService = DatabaseService.getInstance();
 
-	private potentialBuyersLabel: string = "potentialBuyers";
-	private waitingListLabel: string = "waitingList";
 	private buyersLabel: string = "buyers";
 
 	private constructor() {}
@@ -18,31 +16,9 @@ export default class DataService {
 		return this.instance;
 	}
 
-	public getPotentialBuyers(): Buyer[] | Promise<Buyer[]> {
-		const buyers = this.databaseService
-			.listAllDocuments<Buyer>(this.potentialBuyersLabel)
-			.catch((err) => {
-				console.error(err);
-				return [];
-			});
-
-		return buyers;
-	}
-
-	public getWaitingList(): Buyer[] | Promise<Buyer[]> {
-		const buyers = this.databaseService
-			.listAllDocuments<Buyer>(this.waitingListLabel)
-			.catch((err) => {
-				console.error(err);
-				return [];
-			});
-
-		return buyers;
-	}
-
 	public getBuyers(): Buyer[] | Promise<Buyer[]> {
 		const buyers = this.databaseService
-			.listAllDocuments<Buyer>(this.waitingListLabel)
+			.listAllDocuments<Buyer>(this.buyersLabel)
 			.catch((err) => {
 				console.error(err);
 				return [];
@@ -51,38 +27,23 @@ export default class DataService {
 		return buyers;
 	}
 
-	public addPotentialBuyer(buyer: Buyer) {
-		this.databaseService.createDocument(this.potentialBuyersLabel, buyer);
-	}
+	public getBuyer(id: string): Buyer | Promise<Buyer> {
+		const buyer = this.databaseService
+			.getDocument<Buyer>(this.buyersLabel, id)
+			.catch((err) => {
+				console.error(err);
+				return null;
+			});
 
-	public addWaitingList(buyer: Buyer) {
-		this.databaseService.createDocument(this.waitingListLabel, buyer);
+		return buyer;
 	}
 
 	public addBuyer(buyer: Buyer) {
 		this.databaseService.createDocument(this.buyersLabel, buyer);
 	}
 
-	public removePotentialBuyer(buyer: Buyer) {
-		this.databaseService.deleteDocument(this.potentialBuyersLabel, buyer);
-	}
-
-	public removeWaitingListBuyer(buyer: Buyer) {
-		this.databaseService.deleteDocument(this.waitingListLabel, buyer);
-	}
-
 	public removeBuyer(buyer: Buyer) {
 		this.databaseService.deleteDocument(this.buyersLabel, buyer);
-	}
-
-	public clearPotentialBuyers() {
-		this.databaseService.dropCollection(this.potentialBuyersLabel);
-		this.databaseService.createCollection(this.potentialBuyersLabel);
-	}
-
-	public clearWaitingList() {
-		this.databaseService.dropCollection(this.waitingListLabel);
-		this.databaseService.createCollection(this.waitingListLabel);
 	}
 
 	public clearBuyers() {

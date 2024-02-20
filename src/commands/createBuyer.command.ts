@@ -13,6 +13,7 @@ import DataService from "../services/data.srvs.js";
 import DiscordService from "../services/discord.srvs.js";
 import Buyer from "../models/buyer.model.js";
 import Cli from "../services/cli.srvs.js";
+import { BuyerType } from "../enum/buyerType.enum.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -121,9 +122,10 @@ export default {
 					email: email,
 					payed: payed === "true",
 					verifyed: verifyed === "true",
+					type: BuyerType.POTENTIAL,
 				} as Buyer);
 
-				dataService.addPotentialBuyer(buyer);
+				dataService.addBuyer(buyer);
 				Cli.log("Potential buyer created: " + buyer.name);
 
 				interaction.deferReply({ ephemeral: true });

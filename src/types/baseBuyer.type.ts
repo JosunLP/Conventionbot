@@ -1,3 +1,5 @@
+import { BuyerType } from "../enum/buyerType.enum";
+
 export type BaseBuyer = {
 	Id: string;
 	discord: string;
@@ -5,6 +7,7 @@ export type BaseBuyer = {
 	email: string;
 	payed: boolean;
 	verifyed: boolean;
+	type: BuyerType;
 	createdAt: Date;
 	updatedAt: Date;
 };

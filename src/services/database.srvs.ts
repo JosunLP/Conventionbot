@@ -215,6 +215,19 @@ export default class DatabaseService {
 		return documents as T[];
 	}
 
+	public async getDocument<T>(
+		collectionName: string,
+		id: string,
+	): Promise<T | null> {
+		const db = await this.connect(
+			this.config.database.host,
+			this.config.database.databasename,
+		);
+		const collection = db.collection(collectionName);
+		const document = await collection.findOne<T>({ Id: id });
+		return document;
+	}
+
 	public async getUserByUsername(username: string): Promise<User | null> {
 		const db = await this.connect(
 			this.config.database.host,
