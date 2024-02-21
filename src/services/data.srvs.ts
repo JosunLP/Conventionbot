@@ -27,7 +27,7 @@ export default class DataService {
 		return buyers;
 	}
 
-	public getBuyer(id: string): Buyer | Promise<Buyer> {
+	public getBuyer(id: string): Promise<Buyer | null> {
 		const buyer = this.databaseService
 			.getDocument<Buyer>(this.buyersLabel, id)
 			.catch((err) => {
@@ -44,6 +44,10 @@ export default class DataService {
 
 	public removeBuyer(buyer: Buyer) {
 		this.databaseService.deleteDocument(this.buyersLabel, buyer);
+	}
+
+	public updateBuyer(buyer: Buyer, updatedBuyer: Buyer) {
+		this.databaseService.updateDocument(this.buyersLabel, buyer, updatedBuyer);
 	}
 
 	public clearBuyers() {
