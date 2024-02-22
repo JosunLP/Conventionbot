@@ -1,4 +1,11 @@
-import { Client, Events, GatewayIntentBits, REST, Routes } from "discord.js";
+import {
+	ActivityType,
+	Client,
+	Events,
+	GatewayIntentBits,
+	REST,
+	Routes,
+} from "discord.js";
 import ConfigService from "./config.srvs.js";
 import Cli from "./cli.srvs.js";
 import BuyerService from "./buyer.srvs.js";
@@ -43,6 +50,21 @@ export default class DiscordService {
 		this.registerSlahsCommands().catch((err) => {
 			console.error(err);
 			process.exit(1);
+		});
+
+		this.client.on(Events.ClientReady, () => {
+			if (this.client.user) {
+				this.client.user.setPresence({
+					activities: [
+						{
+							name: "Hyde Bot (ALPHA)",
+							type: ActivityType.Custom,
+							state: "Running in development mode",
+						},
+					],
+					status: "online",
+				});
+			}
 		});
 
 		this.client.on(Events.InteractionCreate, async (interaction) => {
