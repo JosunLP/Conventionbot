@@ -1,0 +1,3 @@
+name,age,email,payed,verified
+John Doe,25,johndoe@example.com,true,true
+Jane Smith,30,janesmith@example.com,false,false
