@@ -1,4 +1,4 @@
-import { BuyerType } from "../enum/buyerType.enum";
+import { BuyerType } from "../enum/buyerType.enum.js";
 
 export type BaseBuyer = {
 	Id: string;

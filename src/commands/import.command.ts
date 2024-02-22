@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { SlashCommandBuilder } from "discord.js";
-import CSVImporter from "../classes/csv.js";
+import CSVImporter from "../classes/csv.class.js";
 import Buyer from "../models/buyer.model.js";
 import DataService from "../services/data.srvs.js";
 

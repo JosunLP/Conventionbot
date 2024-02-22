@@ -1,7 +1,7 @@
 import Cli from "./cli.srvs.js";
 import { WebSocketServer } from "ws";
 import { BuyerObject } from "../interfaces/buyerObject.interface.js";
-import Signer from "../classes/sign.js";
+import Signer from "../classes/sign.class.js";
 import Buyer from "../models/buyer.model.js";
 
 export default class BuyerService {

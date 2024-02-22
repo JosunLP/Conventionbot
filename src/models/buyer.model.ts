@@ -1,7 +1,7 @@
-import { BuyerType } from "../enum/buyerType.enum";
-import { BuyerObject } from "../interfaces/buyerObject.interface";
-import { IModel } from "../interfaces/model.interface";
-import { BaseBuyer } from "../types/baseBuyer.type";
+import { BuyerType } from "../enum/buyerType.enum.js";
+import { BuyerObject } from "../interfaces/buyerObject.interface.js";
+import { IModel } from "../interfaces/model.interface.js";
+import { BaseBuyer } from "../types/baseBuyer.type.js";
 
 export default class Buyer implements BaseBuyer, IModel {
 	public readonly Id!: string;
