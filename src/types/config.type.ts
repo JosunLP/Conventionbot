@@ -17,6 +17,7 @@ export type Config = {
 	};
 	messages: {
 		buyer: string;
+		botMode: string;
 	};
 	server: {
 		guild_id: string;

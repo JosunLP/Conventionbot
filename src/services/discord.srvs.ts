@@ -59,7 +59,8 @@ export default class DiscordService {
 						{
 							name: "Hyde Bot (ALPHA)",
 							type: ActivityType.Custom,
-							state: "Running in development mode",
+							state: this.configService.getConfig().messages
+								.botMode,
 						},
 					],
 					status: "online",
@@ -111,10 +112,6 @@ export default class DiscordService {
 		await this.client.login(config.secrets.app_token).then(() => {
 			Cli.log("Connected to Discord!");
 		});
-	}
-
-	private isPathFileOrFolder(path: string) {
-		return fs.lstatSync(path).isDirectory();
 	}
 
 	private async registerSlahsCommands() {

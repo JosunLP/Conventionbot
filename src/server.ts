@@ -3,7 +3,14 @@ import ConfigService from "./services/config.srvs.js";
 import Cli from "./services/cli.srvs.js";
 import DatabaseService from "./services/database.srvs.js";
 import DiscordService from "./services/discord.srvs.js";
-import { ActionRowBuilder, Events, ModalActionRowComponentBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import {
+	ActionRowBuilder,
+	Events,
+	ModalActionRowComponentBuilder,
+	ModalBuilder,
+	TextInputBuilder,
+	TextInputStyle,
+} from "discord.js";
 import DataService from "./services/data.srvs.js";
 import Buyer from "./models/buyer.model.js";
 import { BuyerType } from "./enum/buyerType.enum.js";
@@ -12,7 +19,6 @@ import { BuyerType } from "./enum/buyerType.enum.js";
  * Hyde bot
  */
 class HydeBot {
-
 	/**
 	 * Cli service
 	 */
@@ -36,7 +42,7 @@ class HydeBot {
 
 	/**
 	 * Set listeners
-	*/
+	 */
 	private async setListeners() {
 		const dataService = DataService.getInstance();
 		const discordService = DiscordService.getInstance();
@@ -54,11 +60,15 @@ class HydeBot {
 				const buyer = await dataService.getBuyer(id);
 				if (buyer) {
 					dataService.removeBuyer(buyer);
-					interaction.deferUpdate();
-					interaction.editReply("Buyer deleted");
+					interaction.reply({
+						content: "Buyer deleted",
+						ephemeral: true,
+					});
 				} else {
-					interaction.deferUpdate();
-					interaction.editReply("Buyer not found");
+					interaction.reply({
+						content: "Buyer not found",
+						ephemeral: true,
+					});
 				}
 			}
 			// #endregion
@@ -87,7 +97,10 @@ class HydeBot {
 							break;
 					}
 					dataService.updateBuyer(buyer, updatedBuyer);
-					interaction.editReply("Buyer " + buyer.name + " updated");
+					interaction.reply({
+						content: "Buyer " + buyer.name + " updated",
+						ephemeral: true,
+					});
 				} else {
 					interaction.editReply("Buyer not found");
 				}
@@ -107,7 +120,7 @@ class HydeBot {
 
 				const editModal = new ModalBuilder()
 					.setTitle("Edit Buyer")
-					.setCustomId("edit-buyer");
+					.setCustomId("edit-buyer_" + id);
 
 				const name = new TextInputBuilder()
 					.setPlaceholder("Name")
@@ -188,17 +201,21 @@ class HydeBot {
 			if (!interaction.isModalSubmit()) return;
 
 			const id = interaction.customId.split("_")[1];
+			const type = interaction.customId.split("_")[0];
 
-			const buyer = await dataService.getBuyer(id);
+			if (type === "edit-buyer") {
+				const b = await dataService.getBuyer(id);
 
-			if (!buyer) {
-				interaction.editReply("Buyer not found");
-				return;
-			}
+				if (!b) {
+					interaction.reply({
+						content: "Buyer not found",
+						ephemeral: true,
+					});
+					return;
+				}
 
-			const editBuyer = new Buyer(buyer);
+				const editBuyer = new Buyer(b);
 
-			if (interaction.customId === "edit-buyer") {
 				const name = interaction.fields.getTextInputValue("name");
 				const email = interaction.fields.getTextInputValue("email");
 				const discord = interaction.fields.getTextInputValue("discord");
@@ -215,10 +232,14 @@ class HydeBot {
 					type: editBuyer.type || BuyerType.POTENTIAL,
 				} as Buyer);
 
-				dataService.addBuyer(buyer);
+				dataService.updateBuyer(editBuyer, buyer);
+
 				Cli.log("Buyer Updated: " + buyer.name);
 
-				interaction.editReply("Buyer Updated");
+				interaction.reply({
+					content: "Buyer " + buyer.name + " updated",
+					ephemeral: true,
+				});
 
 				return;
 			}
@@ -243,7 +264,10 @@ class HydeBot {
 				dataService.addBuyer(buyer);
 				Cli.log("Potential buyer created: " + buyer.name);
 
-				interaction.editReply("Buyer created");
+				interaction.reply({
+					content: "Buyer " + buyer.name + " created",
+					ephemeral: true,
+				});
 
 				return;
 			}

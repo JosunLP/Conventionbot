@@ -17,7 +17,6 @@ import { BuyerType } from "../enum/buyerType.enum.js";
  * Discord interaction class
  */
 export default class DiscordInteraction {
-
 	/**
 	 * Creates editable buyer embed
 	 * @param buyer
@@ -97,6 +96,16 @@ export default class DiscordInteraction {
 			{
 				name: "Discord",
 				value: buyer.discord,
+				inline: true,
+			},
+			{
+				name: "Payed",
+				value: buyer.payed ? "Yes" : "No",
+				inline: true,
+			},
+			{
+				name: "Verifyed",
+				value: buyer.verifyed ? "Yes" : "No",
 				inline: true,
 			},
 		);

@@ -47,7 +47,11 @@ export default class DataService {
 	}
 
 	public updateBuyer(buyer: Buyer, updatedBuyer: Buyer) {
-		this.databaseService.updateDocument(this.buyersLabel, buyer, updatedBuyer);
+		this.databaseService.updateDocument(
+			this.buyersLabel,
+			buyer,
+			updatedBuyer,
+		);
 	}
 
 	public clearBuyers() {

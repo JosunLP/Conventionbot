@@ -74,7 +74,6 @@ export default {
 		interaction.editReply(buyers.length + " " + type + " buyers found.");
 
 		buyers.forEach((buyer) => {
-
 			const result = DiscordInteraction.createEditableBuyerEmbed(buyer);
 
 			interaction.followUp({

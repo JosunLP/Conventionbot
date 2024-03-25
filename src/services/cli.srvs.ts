@@ -1,6 +1,20 @@
 import DiscordService from "./discord.srvs.js";
 import BuyerService from "./buyer.srvs.js";
 
+/**
+ * CLI helper class.
+ * @class
+ * @classdesc Provides a CLI interface for the bot.
+ * @exports Cli
+ * @requires DiscordService
+ * @requires BuyerService
+ *
+ * @example
+ * import Cli from "./services/cli.srvs.js";
+ * const cli = Cli.getInstance();
+ *
+ * cli.start();
+ */
 export default class Cli {
 	private static instance: Cli;
 	private isRunning = false;
