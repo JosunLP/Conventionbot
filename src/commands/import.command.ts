@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { SlashCommandBuilder } from "discord.js";
+import { Interaction, SlashCommandBuilder } from "discord.js";
 import CSVImporter from "../classes/csv.class.js";
 import Buyer from "../models/buyer.model.js";
 import DataService from "../services/data.srvs.js";
@@ -36,13 +36,16 @@ export default {
 	}) {
 		const discordService = DiscordService.getInstance();
 
-		if (!discordService.auth(interaction.user.id)) {
-			(interaction as any).reply({
-				content: "You are not authorized to use this command!",
-				ephemeral: true,
-			});
-			return;
-		}
+		discordService.checkPermission(
+			interaction as Interaction,
+			(interaction: Interaction) => {
+				(interaction as any).reply({
+					content: "You are not authorized to use this command!",
+					ephemeral: true,
+				});
+				return;
+			},
+		);
 
 		async function handleUpload<T>(attachment: {
 			attachment: string | URL | Request;

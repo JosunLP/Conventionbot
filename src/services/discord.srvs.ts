@@ -1,8 +1,11 @@
+/* eslint-disable no-unused-vars */
 import {
 	ActivityType,
 	Client,
 	Events,
 	GatewayIntentBits,
+	GuildMemberRoleManager,
+	Interaction,
 	REST,
 	Routes,
 } from "discord.js";
@@ -106,9 +109,23 @@ export default class DiscordService {
 		return this.client;
 	}
 
-	public auth(userId: string): boolean {
-		const config = this.configService.getConfig();
-		return config.server.authorized_users.includes(userId);
+	checkPermission(
+		interaction: Interaction,
+		callback: (interaction: Interaction) => void,
+	): void {
+		const userId = interaction.user.id;
+		const groupId = interaction.guild
+			? interaction.member?.roles instanceof GuildMemberRoleManager
+				? interaction.member.roles.cache.map((role) => role.id)
+				: []
+			: [];
+		const ServerSettings = this.configService.getConfig().server;
+		if (
+			!ServerSettings.authorized_users.includes(userId) &&
+			!groupId.some((id) => ServerSettings.authorized_roles.includes(id))
+		) {
+			callback(interaction);
+		}
 	}
 
 	private async connect() {

@@ -52,13 +52,13 @@ class HydeBot {
 		client.on(Events.InteractionCreate, async (interaction) => {
 			if (!interaction.isButton()) return;
 
-			if (!discordService.auth(interaction.user.id)) {
+			discordService.checkPermission(interaction, (interaction) => {
 				(interaction as any).reply({
 					content: "You are not authorized to use this command!",
 					ephemeral: true,
 				});
 				return;
-			}
+			});
 
 			const id = interaction.customId.split("_")[1];
 			const type = interaction.customId.split("_")[0];
@@ -208,13 +208,13 @@ class HydeBot {
 		client.on(Events.InteractionCreate, async (interaction) => {
 			if (!interaction.isModalSubmit()) return;
 
-			if (!discordService.auth(interaction.user.id)) {
+			discordService.checkPermission(interaction, (interaction) => {
 				(interaction as any).reply({
 					content: "You are not authorized to use this command!",
 					ephemeral: true,
 				});
 				return;
-			}
+			});
 
 			const id = interaction.customId.split("_")[1];
 			const type = interaction.customId.split("_")[0];

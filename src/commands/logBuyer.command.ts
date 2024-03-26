@@ -42,13 +42,13 @@ export default {
 	) {
 		const discordService = DiscordService.getInstance();
 
-		if (!discordService.auth(interaction.user.id)) {
+		discordService.checkPermission(interaction, (interaction) => {
 			(interaction as any).reply({
 				content: "You are not authorized to use this command!",
 				ephemeral: true,
 			});
 			return;
-		}
+		});
 
 		const dataService = DataService.getInstance();
 
