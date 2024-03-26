@@ -9,6 +9,7 @@ import DataService from "../services/data.srvs.js";
 import Buyer from "../models/buyer.model.js";
 import { BuyerType } from "../enum/buyerType.enum.js";
 import DiscordInteraction from "../classes/discordInteraction.class.js";
+import DiscordService from "../services/discord.srvs.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -39,6 +40,16 @@ export default {
 			editReply: (arg0: any) => any;
 		} & Interaction<CacheType>,
 	) {
+		const discordService = DiscordService.getInstance();
+
+		if (!discordService.auth(interaction.user.id)) {
+			(interaction as any).reply({
+				content: "You are not authorized to use this command!",
+				ephemeral: true,
+			});
+			return;
+		}
+
 		const dataService = DataService.getInstance();
 
 		await interaction.deferReply({ ephemeral: true });

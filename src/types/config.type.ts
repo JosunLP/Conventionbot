@@ -22,6 +22,7 @@ export type Config = {
 	server: {
 		guild_id: string;
 		max_buyers: number;
+		authorized_users: string[];
 	};
 	database: {
 		host: string;

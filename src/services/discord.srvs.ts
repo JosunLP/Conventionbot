@@ -106,6 +106,11 @@ export default class DiscordService {
 		return this.client;
 	}
 
+	public auth(userId: string): boolean {
+		const config = this.configService.getConfig();
+		return config.server.authorized_users.includes(userId);
+	}
+
 	private async connect() {
 		const config = this.configService.getConfig();
 		Cli.log("Connecting to Discord...");

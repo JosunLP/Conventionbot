@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ModalBuilder, SlashCommandBuilder, Interaction } from "discord.js";
 import DiscordInteraction from "../classes/discordInteraction.class.js";
+import DiscordService from "../services/discord.srvs.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -11,6 +12,16 @@ export default {
 			showModal(modal: ModalBuilder): unknown;
 		} & Interaction,
 	) {
+		const discordService = DiscordService.getInstance();
+
+		if (!discordService.auth(interaction.user.id)) {
+			(interaction as any).reply({
+				content: "You are not authorized to use this command!",
+				ephemeral: true,
+			});
+			return;
+		}
+
 		const modal = DiscordInteraction.createBuyerModal();
 
 		await interaction.showModal(modal);

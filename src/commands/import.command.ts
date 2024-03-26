@@ -3,6 +3,7 @@ import { SlashCommandBuilder } from "discord.js";
 import CSVImporter from "../classes/csv.class.js";
 import Buyer from "../models/buyer.model.js";
 import DataService from "../services/data.srvs.js";
+import DiscordService from "../services/discord.srvs.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -27,11 +28,22 @@ export default {
 				.setRequired(true),
 		),
 	async execute(interaction: {
+		[x: string]: any;
 		reply: (arg0: string) => any;
 		fetchReply: () => any;
 		deferReply: (arg0: { ephemeral: boolean }) => any;
 		editReply: (arg0: any) => any;
 	}) {
+		const discordService = DiscordService.getInstance();
+
+		if (!discordService.auth(interaction.user.id)) {
+			(interaction as any).reply({
+				content: "You are not authorized to use this command!",
+				ephemeral: true,
+			});
+			return;
+		}
+
 		async function handleUpload<T>(attachment: {
 			attachment: string | URL | Request;
 		}) {
