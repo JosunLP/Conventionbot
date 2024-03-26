@@ -13,7 +13,7 @@
 		"guild_id": "1183146035850256394",
 		"max_buyers": 200,
 		"authorized_users": ["624960388022403092"],
-		"authorized_roles": []
+		"authorized_roles": ["1221976810473000960"]
 	},
 	"database": {
 		"host": "mongodb://mongo:27017",
