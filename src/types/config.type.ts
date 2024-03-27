@@ -23,6 +23,7 @@ export type Config = {
 		guild_id: string;
 		max_buyers: number;
 		authorized_users: string[];
+		authorized_admin_users: string[];
 		authorized_roles: string[];
 	};
 	database: {

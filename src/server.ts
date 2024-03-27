@@ -14,6 +14,7 @@ import {
 import DataService from "./services/data.srvs.js";
 import Buyer from "./models/buyer.model.js";
 import { BuyerType } from "./enum/buyerType.enum.js";
+import UserService from "./services/user.srvs.js";
 
 /**
  * Hyde bot
@@ -288,6 +289,8 @@ class HydeBot {
 				return;
 			}
 		});
+
+		UserService.getInstance().fixUserNames(client);
 	}
 }
 

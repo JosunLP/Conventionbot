@@ -15,6 +15,7 @@ import BuyerService from "./buyer.srvs.js";
 import * as fs from "fs";
 import * as path from "path";
 import Buyer from "../models/buyer.model.js";
+import UserService from "./user.srvs.js";
 
 const __dirname = path.resolve();
 
@@ -23,6 +24,7 @@ export default class DiscordService {
 
 	private configService = ConfigService.getInstance();
 	private buyerService = BuyerService.getInstance();
+	private userService = UserService.getInstance();
 	private commandsJson: any[] = [];
 	private commands: any[] = [];
 
@@ -109,10 +111,10 @@ export default class DiscordService {
 		return this.client;
 	}
 
-	checkPermission(
+	public async checkPermission(
 		interaction: Interaction,
 		callback: (interaction: Interaction) => void,
-	): void {
+	): Promise<void> {
 		const userId = interaction.user.id;
 		const groupId = interaction.guild
 			? interaction.member?.roles instanceof GuildMemberRoleManager
@@ -120,9 +122,13 @@ export default class DiscordService {
 				: []
 			: [];
 		const ServerSettings = this.configService.getConfig().server;
+		const databaseUserList = await this.userService.getUsers();
 		if (
 			!ServerSettings.authorized_users.includes(userId) &&
-			!groupId.some((id) => ServerSettings.authorized_roles.includes(id))
+			!groupId.some((id) =>
+				ServerSettings.authorized_roles.includes(id),
+			) &&
+			!databaseUserList.some((user) => user.Id === userId)
 		) {
 			callback(interaction);
 		}

@@ -10,10 +10,10 @@ export default class ConfigService {
 	}
 
 	public static getInstance() {
-		if (!this.instance) {
-			this.instance = new ConfigService();
+		if (!ConfigService.instance) {
+			ConfigService.instance = new ConfigService();
 		}
-		return this.instance;
+		return ConfigService.instance;
 	}
 
 	private load(): Config {
