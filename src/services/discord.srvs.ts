@@ -128,7 +128,7 @@ export default class DiscordService {
 			!groupId.some((id) =>
 				ServerSettings.authorized_roles.includes(id),
 			) &&
-			!databaseUserList.some((user) => user.Id === userId)
+			!databaseUserList.some((user) => user.discordId === userId)
 		) {
 			callback(interaction);
 		}

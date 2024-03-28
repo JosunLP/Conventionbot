@@ -71,7 +71,8 @@ export default class UserService {
 	}
 
 	public async fixUserNames(client: Client<boolean>) {
-		const users = await this.databaseService.listAllDocuments<User>("users");
+		const users =
+			await this.databaseService.listAllDocuments<User>("users");
 		users.forEach(async (user) => {
 			const discordUser = await client.users.fetch(user.discordId);
 			if (discordUser) {
@@ -81,24 +82,28 @@ export default class UserService {
 					discordUser.username,
 					user.role,
 				);
-				await this.databaseService.updateDocument("users", user, editedUser);
+				await this.databaseService.updateDocument(
+					"users",
+					user,
+					editedUser,
+				);
 			}
 		});
 	}
 
-	public async deleteUser(id: string) {
-		const user = await this.databaseService.findDocument<User>("users", id);
+	public async deleteUser(discordId: string) {
+		const user = await this.databaseService.getUserByDiscordId(discordId);
 		if (!user) {
-			Cli.warn(`User with id ${id} not found`);
+			Cli.warn(`User with id ${discordId} not found`);
 			return;
 		}
 		await this.databaseService.deleteDocument("users", user);
 	}
 
-	public async changeUserType(id: string, type: UserRole) {
-		const user = await this.databaseService.findDocument<User>("users", id);
+	public async changeUserType(discordId: string, type: UserRole) {
+		const user = await this.databaseService.getUserByDiscordId(discordId);
 		if (!user) {
-			Cli.warn(`User with id ${id} not found`);
+			Cli.warn(`User with id ${discordId} not found`);
 			return;
 		}
 		const editedUser = new User(
@@ -111,9 +116,8 @@ export default class UserService {
 	}
 
 	public async editUser(user: User) {
-		const existingUser = await this.databaseService.findDocument<User>(
-			"users",
-			user.Id,
+		const existingUser = await this.databaseService.getUserByDiscordId(
+			user.discordId,
 		);
 		if (!existingUser) {
 			Cli.warn(`User with id ${user.Id} not found`);
@@ -133,13 +137,13 @@ export default class UserService {
 		);
 	}
 
-	public doesUserExist(id: string): boolean {
-		const user = this.databaseService.findDocument<User>("users", id);
+	public doesUserExist(discordId: string): boolean {
+		const user = this.databaseService.getUserByDiscordId(discordId);
 		return user !== undefined;
 	}
 
-	public getUser(id: string) {
-		const user = this.databaseService.findDocument<User>("users", id);
+	public getUser(discordId: string) {
+		const user = this.databaseService.getUserByDiscordId(discordId);
 		return user;
 	}
 
@@ -155,6 +159,6 @@ export default class UserService {
 	) {
 		const user = new User(crypto.randomUUID(), discordId, userName, role);
 
-		await this.databaseService.createDocument<User>("users", user);
+		await this.databaseService.addUser(user);
 	}
 }

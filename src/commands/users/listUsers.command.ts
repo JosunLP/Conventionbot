@@ -12,7 +12,11 @@ export default {
 		),
 	async execute(interaction: {
 		[x: string]: any;
-		reply: (arg0: { embeds?: [{}]; ephemeral: boolean; content:string }) => any;
+		reply: (arg0: {
+			embeds?: [{}];
+			ephemeral: boolean;
+			content: string;
+		}) => any;
 		fetchReply: () => any;
 		deferReply: (arg0: { ephemeral: boolean }) => any;
 		editReply: (arg0: any) => any;
@@ -35,11 +39,17 @@ export default {
 		const users = await userService.getUsers();
 
 		if (users === undefined || users.length === 0) {
-			interaction.editReply({ ephemeral: true, content: "No users found" });
+			interaction.editReply({
+				ephemeral: true,
+				content: "No users found",
+			});
 			return;
 		}
 
-		interaction.editReply({ ephemeral: true, content: "Listing all users..." });
+		interaction.editReply({
+			ephemeral: true,
+			content: "Listing all users...",
+		});
 
 		users.forEach((user) => {
 			const embed = {

@@ -188,4 +188,37 @@ export default class DiscordInteraction {
 
 		return modal;
 	}
+
+	public static editUserModal(): ModalBuilder {
+		const modal = new ModalBuilder()
+			.setCustomId("edit-user")
+			.setTitle("Edit User");
+
+		const discord = new TextInputBuilder()
+			.setPlaceholder("Discord Username")
+			.setRequired(true)
+			.setLabel("Please enter the discord name of the user")
+			.setCustomId("discord-username")
+			.setStyle(TextInputStyle.Short);
+
+		const role = new TextInputBuilder()
+			.setPlaceholder("User")
+			.setRequired(true)
+			.setLabel("Please enter the role of the user")
+			.setCustomId("role")
+			.setStyle(TextInputStyle.Short);
+
+		const firstActionRow =
+			new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+				discord,
+			);
+		const secondActionRow =
+			new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+				role,
+			);
+
+		modal.addComponents(firstActionRow, secondActionRow);
+
+		return modal;
+	}
 }

@@ -9,7 +9,7 @@ import {
 } from "mongodb";
 import ConfigService from "./config.srvs.js";
 import { IModel } from "../interfaces/model.interface.js";
-import { User } from "discord.js";
+import { User } from "../models/user.model.js";
 
 /**
  * Database service
@@ -245,6 +245,16 @@ export default class DatabaseService {
 		);
 		const collection = db.collection("users");
 		const user = await collection.findOne<User>({ Id: id });
+		return user;
+	}
+
+	public async getUserByDiscordId(discordId: string): Promise<User | null> {
+		const db = await this.connect(
+			this.config.database.host,
+			this.config.database.databasename,
+		);
+		const collection = db.collection("users");
+		const user = await collection.findOne<User>({ discordId });
 		return user;
 	}
 

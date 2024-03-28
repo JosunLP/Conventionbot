@@ -33,10 +33,11 @@ class HydeBot {
 		DatabaseService.getInstance();
 		BuyerService.getInstance();
 
-		this.cli.start().catch((err) => {
-			console.error(err);
-			process.exit(1);
-		});
+		// enable this if you want to use the cli
+		// this.cli.start().catch((err) => {
+		// 	console.error(err);
+		// 	process.exit(1);
+		// });
 
 		this.setListeners();
 	}
@@ -48,6 +49,10 @@ class HydeBot {
 		const dataService = DataService.getInstance();
 		const discordService = DiscordService.getInstance();
 		const client = discordService.getClient();
+
+		client.on(Events.ClientReady, async () => {
+			await UserService.getInstance().fixUserNames(client);
+		});
 
 		// Buttons
 		client.on(Events.InteractionCreate, async (interaction) => {
@@ -289,8 +294,6 @@ class HydeBot {
 				return;
 			}
 		});
-
-		UserService.getInstance().fixUserNames(client);
 	}
 }
 
