@@ -21,6 +21,6 @@
 		"username": "admin",
 		"password": "admin",
 		"databasename": "hydebot",
-		"collections": ["potentialBuyers", "waitingList", "buyers", "users"]
+		"collections": ["waitingList", "buyers", "users"]
 	}
 }

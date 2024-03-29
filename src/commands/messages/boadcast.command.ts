@@ -4,6 +4,7 @@ import DiscordService from "../../services/discord.srvs.js";
 import UserService from "../../services/user.srvs.js";
 import { UserRole } from "../../enum/userRole.enum.js";
 import Cli from "../../services/cli.srvs.js";
+import BuyerService from "../../services/buyer.srvs.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -19,8 +20,11 @@ export default {
 				)
 				.setRequired(true)
 				.addChoices(
-					{ name: "User", value: "user" },
-					{ name: "Admin", value: "admin" },
+					{ name: "All", value: "all" },
+					{ name: "Waiting List", value: "wlist" },
+					{ name: "Please Pay List", value: "plist" },
+					{ name: "Paid List", value: "paidlist" },
+					{ name: "Unpaid warning List", value: "unpaidwlist" },
 				),
 		),
 	async execute(interaction: {
@@ -31,7 +35,7 @@ export default {
 		editReply: (arg0: any) => any;
 	}) {
 		const discordService = DiscordService.getInstance();
-		const userService = UserService.getInstance();
+		const buyerService = BuyerService.getInstance();
 
 		discordService.checkPermission(
 			interaction as Interaction,
@@ -44,5 +48,59 @@ export default {
 			},
 		);
 
+		const type = interaction.options.getString("type");
+		const waitingList = await buyerService.getWaitingList();
+		const buyerList = await buyerService.getBuyerList();
+
+		switch (type) {
+			case "all":
+				buyerList.forEach((buyer) => {
+					discordService.sendDirectMessage(
+						buyer.discord,
+						"Hello, this is a broadcast message to all buyers.",
+					);
+				});
+				break;
+			case "wlist":
+				waitingList.forEach((buyer) => {
+					discordService.sendDirectMessage(
+						buyer.discord,
+						"Hello, this is a broadcast message to all buyers on the waiting list.",
+					);
+				});
+				break;
+			case "plist":
+				buyerList.forEach((buyer) => {
+					if (!buyer.payed) {
+						discordService.sendDirectMessage(
+							buyer.discord,
+							"Hello, this is a broadcast message to all buyers on the please pay list.",
+						);
+					}
+				});
+				break;
+			case "paidlist":
+				buyerList.forEach((buyer) => {
+					if (buyer.payed) {
+						discordService.sendDirectMessage(
+							buyer.discord,
+							"Hello, this is a broadcast message to all buyers on the paid list.",
+						);
+					}
+				});
+				break;
+			case "unpaidwlist":
+				waitingList.forEach((buyer) => {
+					if (!buyer.payed) {
+						discordService.sendDirectMessage(
+							buyer.discord,
+							"Hello, this is a broadcast message to all buyers on the unpaid warning list.",
+						);
+					}
+				});
+				break;
+			default:
+				break;
+		}
 	},
 };
