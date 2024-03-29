@@ -42,8 +42,9 @@ export default class Cli {
 			description: "Lists the bot's connection status.",
 			execute: () => {
 				Cli.log(
-					`Logged in as ${this.discordService.getClient().user
-						?.tag}!`,
+					`Logged in as ${
+						this.discordService.getClient().user?.tag
+					}!`,
 				);
 			},
 		},
