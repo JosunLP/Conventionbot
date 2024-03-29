@@ -34,6 +34,7 @@ export default {
 				});
 				return;
 			},
+			true
 		);
 
 		const users = await userService.getUsers();

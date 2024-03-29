@@ -50,6 +50,7 @@ export default {
 				});
 				return;
 			},
+			true
 		);
 
 		await interaction.deferReply({ ephemeral: true });

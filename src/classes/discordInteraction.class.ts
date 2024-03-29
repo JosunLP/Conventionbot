@@ -9,9 +9,11 @@ import {
 	ModalActionRowComponentBuilder,
 	TextInputBuilder,
 	TextInputStyle,
+	StringSelectMenuBuilder,
 } from "discord.js";
 import Buyer from "../models/buyer.model.js";
 import { BuyerType } from "../enum/buyerType.enum.js";
+import { User } from "../models/user.model.js";
 
 /**
  * Discord interaction class
@@ -189,22 +191,24 @@ export default class DiscordInteraction {
 		return modal;
 	}
 
-	public static editUserModal(): ModalBuilder {
+	public static editUserModal(user: User): ModalBuilder {
 		const modal = new ModalBuilder()
-			.setCustomId("edit-user")
+			.setCustomId("edit-user_" + user.discordId)
 			.setTitle("Edit User");
 
 		const discord = new TextInputBuilder()
-			.setPlaceholder("Discord Username")
+			.setPlaceholder("Discord username")
+			.setValue(user.username.toString())
 			.setRequired(true)
 			.setLabel("Please enter the discord name of the user")
-			.setCustomId("discord-username")
+			.setCustomId("discordName")
 			.setStyle(TextInputStyle.Short);
 
 		const role = new TextInputBuilder()
-			.setPlaceholder("User")
+			.setPlaceholder("admin, user")
+			.setValue(user.role.toString())
 			.setRequired(true)
-			.setLabel("Please enter the role of the user")
+			.setLabel("Please enter the role [admin, user]")
 			.setCustomId("role")
 			.setStyle(TextInputStyle.Short);
 

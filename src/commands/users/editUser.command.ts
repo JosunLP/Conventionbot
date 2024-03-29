@@ -2,7 +2,7 @@
 import { Interaction, SlashCommandBuilder, User } from "discord.js";
 import DiscordService from "../../services/discord.srvs.js";
 import UserService from "../../services/user.srvs.js";
-import { UserRole } from "../../enum/userRole.enum.js";
+import DiscordInteraction from "../../classes/discordInteraction.class.js";
 import Cli from "../../services/cli.srvs.js";
 
 export default {
@@ -21,7 +21,6 @@ export default {
 		),
 	async execute(interaction: {
 		[x: string]: any;
-		reply: (arg0: string) => any;
 		fetchReply: () => any;
 		deferReply: (arg0: { ephemeral: boolean }) => any;
 		editReply: (arg0: any) => any;
@@ -38,21 +37,24 @@ export default {
 				});
 				return;
 			},
+			true
 		);
-
-		await interaction.deferReply({ ephemeral: true });
 
 		const discordUser = interaction.options.getUser("user") as User;
 
 		const user = await userService.getUser(discordUser.id);
 
 		if (!user) {
-			interaction.editReply(
-				`User ${discordUser.username} does not exist in the database.`,
-			);
+			interaction.reply({
+				content: "User not found!",
+				ephemeral: true,
+			});
+			Cli.log("User not found!");
 			return;
 		}
 
-		interaction.editReply(`Editing user ${user.username}...`);
+		const modal = DiscordInteraction.editUserModal(user);
+
+		interaction.showModal(modal);
 	},
 };

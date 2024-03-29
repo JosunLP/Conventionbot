@@ -111,9 +111,19 @@ export default class DiscordService {
 		return this.client;
 	}
 
+	/**
+	 * Checks permission
+	 * @param interaction
+	 * @param callback
+	 * @param [sudo]
+	 * @returns permission
+	 * @memberof DiscordService
+	 * @description Checks if the user has permission to execute the command or not
+	 */
 	public async checkPermission(
 		interaction: Interaction,
 		callback: (interaction: Interaction) => void,
+		sudo: boolean = false,
 	): Promise<void> {
 		const userId = interaction.user.id;
 		const groupId = interaction.guild
@@ -123,14 +133,45 @@ export default class DiscordService {
 			: [];
 		const ServerSettings = this.configService.getConfig().server;
 		const databaseUserList = await this.userService.getUsers();
-		if (
-			!ServerSettings.authorized_users.includes(userId) &&
-			!groupId.some((id) =>
-				ServerSettings.authorized_roles.includes(id),
-			) &&
-			!databaseUserList.some((user) => user.discordId === userId)
-		) {
-			callback(interaction);
+		let databaseAdminUsers = [];
+
+		switch (sudo) {
+			case true:
+				databaseAdminUsers = await this.userService.getAdminUsers();
+				if (
+					!ServerSettings.authorized_users.includes(userId) &&
+					!databaseAdminUsers.some(
+						(user) => user.discordId === userId,
+					)
+				) {
+					callback(interaction);
+				}
+
+				break;
+
+			case false:
+				if (
+					!ServerSettings.authorized_users.includes(userId) &&
+					!groupId.some((id) =>
+						ServerSettings.authorized_roles.includes(id),
+					) &&
+					!databaseUserList.some((user) => user.discordId === userId)
+				) {
+					callback(interaction);
+				}
+				break;
+
+			default:
+				if (
+					!ServerSettings.authorized_users.includes(userId) &&
+					!groupId.some((id) =>
+						ServerSettings.authorized_roles.includes(id),
+					) &&
+					!databaseUserList.some((user) => user.discordId === userId)
+				) {
+					callback(interaction);
+				}
+				break;
 		}
 	}
 

@@ -15,6 +15,8 @@ import DataService from "./services/data.srvs.js";
 import Buyer from "./models/buyer.model.js";
 import { BuyerType } from "./enum/buyerType.enum.js";
 import UserService from "./services/user.srvs.js";
+import { User } from "./models/user.model.js";
+import { UserRole } from "./enum/userRole.enum.js";
 
 /**
  * Hyde bot
@@ -48,8 +50,10 @@ class HydeBot {
 	private async setListeners() {
 		const dataService = DataService.getInstance();
 		const discordService = DiscordService.getInstance();
+		const userService = UserService.getInstance();
 		const client = discordService.getClient();
 
+		// Ready
 		client.on(Events.ClientReady, async () => {
 			await UserService.getInstance().fixUserNames(client);
 		});
@@ -292,6 +296,45 @@ class HydeBot {
 				});
 
 				return;
+			}
+
+			if (type == "edit-user") {
+				const discordName =
+					interaction.fields.getTextInputValue("discordName");
+				let role = interaction.fields.getTextInputValue("role");
+
+				const user = await userService.getUser(id);
+
+				if (!user) {
+					interaction.reply({
+						content: "User not found",
+						ephemeral: true,
+					});
+					return;
+				}
+
+				if (
+					role.toLowerCase() !== UserRole.ADMIN &&
+					role.toLowerCase() !== UserRole.USER
+				) {
+					role = user.role;
+				}
+
+				const updatedUser = new User(
+					user.Id,
+					user.discordId,
+					discordName,
+					role.toLowerCase() as UserRole,
+				);
+
+				userService.updateUser(user, updatedUser);
+
+				interaction.reply({
+					content: "User " + user.username + " updated",
+					ephemeral: true,
+				});
+
+				Cli.log("User Updated: " + user.username);
 			}
 		});
 	}

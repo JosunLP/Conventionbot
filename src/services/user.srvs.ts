@@ -161,4 +161,15 @@ export default class UserService {
 
 		await this.databaseService.addUser(user);
 	}
+
+	public async updateUser(oldUser: User, newUser: User) {
+		await this.databaseService.updateDocument("users", oldUser, newUser);
+	}
+
+	public async getAdminUsers() {
+		const users =
+			await this.databaseService.listAllDocuments<User>("users");
+		const adminUsers = users.filter((user) => user.role === UserRole.ADMIN);
+		return adminUsers;
+	}
 }
