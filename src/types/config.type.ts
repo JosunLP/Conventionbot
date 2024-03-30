@@ -17,6 +17,9 @@ export type Config = {
 	};
 	messages: {
 		buyer: string;
+		waitingList: string;
+		payedConfirmation: string;
+		payReminder: string;
 		botMode: string;
 	};
 	server: {

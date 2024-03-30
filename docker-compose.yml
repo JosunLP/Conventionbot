@@ -1,8 +1,8 @@
 version: "3"
 services:
-  hydebot-server:
-    container_name: hydebot-server
-    image: hydebot-server
+  conventionbot-server:
+    container_name: conventionbot-server
+    image: conventionbot-server
     restart: always
     build: .
     ports:
@@ -10,7 +10,7 @@ services:
     links:
       - mongo
     networks:
-      - hydebot-network
+      - conventionbot-network
     depends_on:
       - mongo
       - mongo-express
@@ -34,9 +34,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
-      MONGO_INITDB_DATABASE: hydebot-server
+      MONGO_INITDB_DATABASE: conventionbot-server
     networks:
-      - hydebot-network
+      - conventionbot-network
 
   mongo-express:
     image: mongo-express:latest
@@ -51,12 +51,12 @@ services:
       ME_CONFIG_MONGODB_PORT: "27017"
       ME_CONFIG_MONGODB_URL: mongodb://0.0.0.0:27017
     networks:
-      - hydebot-network
+      - conventionbot-network
 
 networks:
-  hydebot-network:
+  conventionbot-network:
     driver: bridge
-    name: hydebot-network
+    name: conventionbot-network
 
 volumes:
   MONGO_DATA:

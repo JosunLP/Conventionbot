@@ -19,9 +19,9 @@ import { User } from "./models/user.model.js";
 import { UserRole } from "./enum/userRole.enum.js";
 
 /**
- * Hyde bot
+ * Convention bot
  */
-class HydeBot {
+class ConventionBot {
 	/**
 	 * Cli service
 	 */
@@ -340,4 +340,4 @@ class HydeBot {
 	}
 }
 
-new HydeBot();
+new ConventionBot();

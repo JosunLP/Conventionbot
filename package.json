@@ -1,7 +1,7 @@
 {
-	"name": "hydebot-server",
+	"name": "conventionbot-server",
 	"version": "0.0.1",
-	"description": "A bot to handle registration and questions to the german HYDE convention",
+	"description": "A bot to handle registration and questions to german Conventions",
 	"main": "./dist/server.js",
 	"type": "module",
 	"scripts": {
@@ -13,11 +13,11 @@
 		"tooling-run": "node ./tools/syncConfig.js",
 		"tooling-build": "tsc --project ./tooling.tsconfig.json",
 		"docker-stop": "docker-compose down",
-		"docker-build": "npm run docker-prune && docker build . -t hydebot-server",
+		"docker-build": "npm run docker-prune && docker build . -t conventionbot-server",
 		"docker-prune": "docker image prune -f"
 	},
 	"keywords": [
-		"HYDE",
+		"Convention",
 		"nodejs",
 		"discord"
 	],
@@ -34,7 +34,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@typescript-eslint/parser": "^6.13.2",
-		"discord.js": "^14.14.1",
+		"discord.js": "^14.12.1",
 		"mongodb": "^6.3.0"
 	},
 	"devDependencies": {

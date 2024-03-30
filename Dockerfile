@@ -30,5 +30,5 @@ EXPOSE 8080
 
 CMD [ "node", "dist/server.js" ]
 
-# docker build . -t hydebot-server
-# docker run -p 49160:8080 -d hydebot-server
+# docker build . -t conventionbot-server
+# docker run -p 49160:8080 -d conventionbot-server

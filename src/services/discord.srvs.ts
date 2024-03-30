@@ -62,7 +62,7 @@ export default class DiscordService {
 				this.client.user.setPresence({
 					activities: [
 						{
-							name: "Hyde Bot (ALPHA)",
+							name: "Convention Bot (ALPHA)",
 							type: ActivityType.Custom,
 							state: this.configService.getConfig().messages
 								.botMode,
@@ -235,28 +235,30 @@ export default class DiscordService {
 		})();
 	}
 
-	public sendMessagesToBuyers() {
-		const config = this.configService.getConfig();
-		const buyers = this.buyerService.getBuyers();
-
-		let message = config.messages.buyer;
-
-		buyers.forEach((buyer: Buyer) => {
-			message = message.replaceAll("{{name}}", buyer.name);
-
-			this.client.guilds.fetch().then((guilds) => {
-				guilds.forEach((guild) => {
-					guild.fetch().then((guild) => {
-						guild.members.fetch().then((members) => {
-							members.forEach((member) => {
-								if (member.user.tag === buyer.discord) {
-									member.send(message);
-								}
-							});
+	public async sendDirectMessage(discordId: string, message: string) {
+		this.client.guilds.fetch().then((guilds) => {
+			guilds.forEach((guild) => {
+				guild.fetch().then((guild) => {
+					guild.members.fetch().then((members) => {
+						members.forEach((member) => {
+							if (member.user.tag === discordId) {
+								member.send(message);
+							}
 						});
 					});
 				});
 			});
 		});
+	}
+
+	public async sendBroadcastMessage(message: string, list: Buyer[]) {
+		list.forEach((buyer) => {
+			this.sendDirectMessage(buyer.discord, message);
+		});
+	}
+
+	public async sendBroadcastMessageToAll(message: string) {
+		const buyers = await this.buyerService.getBuyerList();
+		this.sendBroadcastMessage(message, buyers);
 	}
 }
