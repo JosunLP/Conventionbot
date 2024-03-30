@@ -48,17 +48,10 @@ export default class Cli {
 			},
 		},
 		{
-			command: "send",
-			description: "Sends a message to all buyers.",
-			execute: () => {
-				this.discordService.sendMessagesToBuyers();
-			},
-		},
-		{
 			command: "list-buyers",
 			description: "Lists all buyers.",
-			execute: () => {
-				const buyers = this.buyerService.getBuyers();
+			execute: async () => {
+				const buyers = await this.buyerService.getBuyers();
 				if (buyers.length === 0) {
 					console.log("No buyers found.");
 					return;
@@ -116,7 +109,7 @@ export default class Cli {
 	}
 
 	public static renderHeader() {
-		console.log("HydeBot v0.0.1");
+		console.log("ConventionBot v0.0.1");
 		console.log("Running in CLI mode.");
 		this.renderSpacers();
 		console.log("Type 'help' for a list of commands.");

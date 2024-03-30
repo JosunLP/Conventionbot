@@ -1,8 +1,8 @@
 {
 	"meta": {
-		"name": "hydebot-server",
+		"name": "conventionbot-server",
 		"version": "0.0.1",
-		"description": "A bot to handle registration and questions to the german HYDE convention",
+		"description": "A bot to handle registration and questions to the german Convention convention",
 		"license": "MIT"
 	},
 	"messages": {
@@ -20,7 +20,7 @@
 		"host": "mongodb://mongo:27017",
 		"username": "admin",
 		"password": "admin",
-		"databasename": "hydebot",
+		"databasename": "conventionbot",
 		"collections": ["waitingList", "buyers", "users"]
 	}
 }

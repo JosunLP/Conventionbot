@@ -62,7 +62,7 @@ export default class DiscordService {
 				this.client.user.setPresence({
 					activities: [
 						{
-							name: "Hyde Bot (ALPHA)",
+							name: "Convention Bot (ALPHA)",
 							type: ActivityType.Custom,
 							state: this.configService.getConfig().messages
 								.botMode,
