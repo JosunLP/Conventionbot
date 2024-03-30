@@ -1,7 +1,7 @@
 {
 	"name": "conventionbot-server",
 	"version": "0.0.1",
-	"description": "A bot to handle registration and questions to the german HYDE convention",
+	"description": "A bot to handle registration and questions to german Conventions",
 	"main": "./dist/server.js",
 	"type": "module",
 	"scripts": {
@@ -17,7 +17,7 @@
 		"docker-prune": "docker image prune -f"
 	},
 	"keywords": [
-		"HYDE",
+		"Convention",
 		"nodejs",
 		"discord"
 	],

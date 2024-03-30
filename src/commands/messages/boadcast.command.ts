@@ -53,7 +53,6 @@ export default {
 
 		switch (type) {
 			case "all":
-
 				break;
 			case "waitinglist":
 				waitingList.forEach((buyer) => {
