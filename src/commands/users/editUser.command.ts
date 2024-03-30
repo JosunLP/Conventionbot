@@ -37,7 +37,7 @@ export default {
 				});
 				return;
 			},
-			true
+			true,
 		);
 
 		const discordUser = interaction.options.getUser("user") as User;

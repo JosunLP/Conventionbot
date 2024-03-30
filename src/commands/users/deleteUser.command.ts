@@ -37,17 +37,14 @@ export default {
 				});
 				return;
 			},
-			true
+			true,
 		);
 
 		await interaction.deferReply({ ephemeral: true });
 
 		const discordUser = interaction.options.getUser("user") as User;
 
-		console.log(discordUser);
-
 		const user = await userService.getUser(discordUser.id);
-		console.log(user);
 
 		if (!user) {
 			interaction.editReply(

@@ -1,41 +1,14 @@
-import Cli from "./cli.srvs.js";
-import { WebSocketServer } from "ws";
 import { BuyerObject } from "../interfaces/buyerObject.interface.js";
-import Signer from "../classes/sign.class.js";
 import Buyer from "../models/buyer.model.js";
+import { BuyerType } from "../enum/buyerType.enum.js";
+import DatabaseService from "./database.srvs.js";
+import Cli from "./cli.srvs.js";
 
 export default class BuyerService {
 	private static instance: BuyerService;
-	private buyers = [] as Buyer[];
-	private wss = new WebSocketServer({ port: 8080 });
+	private databaseService = DatabaseService.getInstance();
 
-	private constructor() {
-		this.wss.on("error", (error) => {
-			Cli.error("Buyer WebSocket error", error);
-		});
-		this.wss.on("connection", (ws) => {
-			Cli.log("Buyer connected to WebSocket");
-			ws.on("upgrade", () => {
-				Cli.log("Buyer WebSocket upgraded");
-			});
-			ws.on("message", (message: BuyerObject) => {
-				const buyer = this.checkIfObjectIsBuyer(
-					JSON.parse(message.toString()),
-				)
-					? JSON.parse(message.toString())
-					: null;
-				if (!buyer) return;
-
-				if (!Signer.verifySignature(buyer, buyer.sign)) {
-					Cli.error("Buyer signature is not valid", new Error());
-					return;
-				}
-
-				this.buyers.push(buyer);
-				Cli.log(`Buyer ${buyer.name} added`);
-			});
-		});
-	}
+	private constructor() {}
 
 	public static getInstance() {
 		if (!this.instance) {
@@ -52,23 +25,96 @@ export default class BuyerService {
 		);
 	}
 
-	public getBuyers(): Buyer[] {
-		return this.buyers;
+	public async getBuyers(): Promise<Buyer[]> {
+		const buyer = this.databaseService.listAllDocuments<Buyer>("buyers");
+		return buyer;
 	}
 
-	public setBuyers(buyers: Buyer[]) {
-		this.buyers = buyers;
+	public async setBuyers(buyers: Buyer[]) {
+		buyers.forEach((buyer) => {
+			const b = this.databaseService.getDocument<Buyer>(
+				"buyers",
+				buyer.Id,
+			);
+
+			if (!b) {
+				this.databaseService.createDocument("buyers", buyer);
+			} else {
+				Cli.warn(
+					`Buyer with id ${buyer.Id} already exists in the database.`,
+				);
+			}
+		});
 	}
 
 	public addBuyer(buyer: Buyer) {
-		this.buyers.push(buyer);
+		const b = this.databaseService.getDocument<Buyer>("buyers", buyer.Id);
+
+		if (!b) {
+			this.databaseService.createDocument("buyers", buyer);
+		} else {
+			Cli.warn(
+				`Buyer with id ${buyer.Id} already exists in the database.`,
+			);
+		}
 	}
 
 	public removeBuyer(buyer: Buyer) {
-		this.buyers = this.buyers.filter((b) => b !== buyer);
+		this.databaseService
+			.deleteDocument("buyers", buyer)
+			.then(() => {
+				Cli.log(`Buyer with id ${buyer.Id} has been removed.`);
+			})
+			.catch((error) => {
+				Cli.error(
+					`Error while removing buyer with id ${buyer.Id}.`,
+					error,
+				);
+			});
 	}
 
 	public clearBuyers() {
-		this.buyers = [];
+		this.databaseService
+			.dropCollection("buyers")
+			.then(() => {
+				Cli.log("Buyers collection has been cleared.");
+				this.databaseService.createCollection("buyers");
+			})
+			.catch((error) => {
+				Cli.error("Error while clearing buyers collection.", error);
+			});
+	}
+
+	public async getWaitingList(): Promise<Buyer[]> {
+		const buyers = await this.getBuyers();
+		return buyers.filter((buyer) => buyer.type === BuyerType.WAITING);
+	}
+
+	public async getBuyerList(): Promise<Buyer[]> {
+		const buyers = await this.getBuyers();
+		return buyers.filter((buyer) => buyer.type === BuyerType.BUYER);
+	}
+
+	public async getPotentialList(): Promise<Buyer[]> {
+		const buyers = await this.getBuyers();
+		return buyers.filter((buyer) => buyer.type === BuyerType.POTENTIAL);
+	}
+
+	public async getBuyerById(id: string): Promise<Buyer | undefined> {
+		return (await this.getBuyers()).find((buyer) => buyer.Id === id);
+	}
+
+	public async getBuyerByDiscord(
+		discord: string,
+	): Promise<Buyer | undefined> {
+		return (await this.getBuyers()).find(
+			(buyer) => buyer.discord === discord,
+		);
+	}
+
+	public async getBuyerByName(name: string): Promise<Buyer | undefined> {
+		return (await this.getBuyers()).find((buyer) =>
+			buyer.name.includes(name),
+		);
 	}
 }
