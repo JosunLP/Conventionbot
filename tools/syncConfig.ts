@@ -43,6 +43,10 @@ distConfig.secrets.app_token = process.env.APP_TOKEN;
 distConfig.secrets.signature_key_private = process.env.SIGNATURE_KEY_PRIVATE;
 distConfig.secrets.signature_key_public = process.env.SIGNATURE_KEY_PUBLIC;
 
+distConfig.server.authorized_users.push(process.env.BASE_USER_ID);
+distConfig.server.authorized_admin_users.push(process.env.BASE_ADMIN_ID);
+distConfig.server.authorized_roles.push(process.env.BASE_ROLE_ID);
+
 fs.writeFileSync(
 	"./dist/config/config.json",
 	JSON.stringify(distConfig, null, 2),

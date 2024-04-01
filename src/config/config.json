@@ -12,9 +12,9 @@
 	"server": {
 		"guild_id": "1183146035850256394",
 		"max_buyers": 200,
-		"authorized_users": ["624960388022403092"],
-		"authorized_admin_users": ["624960388022403092"],
-		"authorized_roles": ["1221976810473000960"]
+		"authorized_users": [""],
+		"authorized_admin_users": [""],
+		"authorized_roles": [""]
 	},
 	"database": {
 		"host": "mongodb://mongo:27017",
