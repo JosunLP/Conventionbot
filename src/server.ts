@@ -23,17 +23,13 @@ import { UserRole } from "./enum/userRole.enum.js";
  */
 class ConventionBot {
 	/**
-	 * Cli service
-	 */
-	private cli = Cli.getInstance();
-
-	/**
 	 * Constructor
 	 */
 	constructor() {
 		ConfigService.getInstance();
 		DatabaseService.getInstance();
 		BuyerService.getInstance();
+		Cli.getInstance();
 
 		// enable this if you want to use the cli
 		// this.cli.start().catch((err) => {
