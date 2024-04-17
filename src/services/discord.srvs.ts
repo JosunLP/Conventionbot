@@ -132,46 +132,42 @@ export default class DiscordService {
 				: []
 			: [];
 		const ServerSettings = this.configService.getConfig().server;
-		const databaseUserList = await this.userService.getUsers();
-		let databaseAdminUsers = [];
 
-		switch (sudo) {
-			case true:
-				databaseAdminUsers = await this.userService.getAdminUsers();
-				if (
-					!ServerSettings.authorized_users.includes(userId) &&
-					!databaseAdminUsers.some(
-						(user) => user.discordId === userId,
-					)
-				) {
-					callback(interaction);
-				}
+		const isUserAuthorized = async (
+			userId: string,
+			groupId: string[],
+			databaseUserList: any[],
+		) => {
+			const isAdmin =
+				sudo &&
+				(await this.userService.getAdminUsers()).some(
+					(user) => user.discordId === userId,
+				);
+			const isAuthorizedUser =
+				ServerSettings.authorized_users.includes(userId);
+			const isAuthorizedRole = groupId.some((id) =>
+				ServerSettings.authorized_roles.includes(id),
+			);
+			const isDatabaseUser = databaseUserList.some(
+				(user) => user.discordId === userId,
+			);
 
-				break;
+			return (
+				isAdmin ||
+				isAuthorizedUser ||
+				isAuthorizedRole ||
+				isDatabaseUser
+			);
+		};
 
-			case false:
-				if (
-					!ServerSettings.authorized_users.includes(userId) &&
-					!groupId.some((id) =>
-						ServerSettings.authorized_roles.includes(id),
-					) &&
-					!databaseUserList.some((user) => user.discordId === userId)
-				) {
-					callback(interaction);
-				}
-				break;
+		const isAuthorized = await isUserAuthorized(
+			userId,
+			groupId,
+			await this.userService.getUsers(),
+		);
 
-			default:
-				if (
-					!ServerSettings.authorized_users.includes(userId) &&
-					!groupId.some((id) =>
-						ServerSettings.authorized_roles.includes(id),
-					) &&
-					!databaseUserList.some((user) => user.discordId === userId)
-				) {
-					callback(interaction);
-				}
-				break;
+		if (!isAuthorized) {
+			callback(interaction);
 		}
 	}
 

@@ -14,13 +14,22 @@ export default {
 	) {
 		const discordService = DiscordService.getInstance();
 
-		discordService.checkPermission(interaction, (interaction) => {
-			(interaction as any).reply({
-				content: "You are not authorized to use this command!",
-				ephemeral: true,
-			});
+		let terminate = false;
+
+		await discordService.checkPermission(
+			interaction as Interaction,
+			(interaction) => {
+				(interaction as any).reply({
+					content: "You are not authorized to use this command!",
+					ephemeral: true,
+				});
+				terminate = true;
+			},
+		);
+
+		if (terminate) {
 			return;
-		});
+		}
 
 		const modal = DiscordInteraction.createBuyerModal();
 

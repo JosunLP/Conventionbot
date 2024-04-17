@@ -35,16 +35,22 @@ export default {
 		const buyerService = BuyerService.getInstance();
 		const configService = ConfigService.getInstance();
 
-		discordService.checkPermission(
+		let terminate = false;
+
+		await discordService.checkPermission(
 			interaction as Interaction,
 			(interaction) => {
 				(interaction as any).reply({
 					content: "You are not authorized to use this command!",
 					ephemeral: true,
 				});
-				return;
+				terminate = true;
 			},
 		);
+
+		if (terminate) {
+			return;
+		}
 
 		const type = interaction.options.getString("type");
 		const waitingList = await buyerService.getWaitingList();

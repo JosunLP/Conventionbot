@@ -36,16 +36,22 @@ export default {
 	}) {
 		const discordService = DiscordService.getInstance();
 
-		discordService.checkPermission(
+		let terminate = false;
+
+		await discordService.checkPermission(
 			interaction as Interaction,
-			(interaction: Interaction) => {
+			(interaction) => {
 				(interaction as any).reply({
 					content: "You are not authorized to use this command!",
 					ephemeral: true,
 				});
-				return;
+				terminate = true;
 			},
 		);
+
+		if (terminate) {
+			return;
+		}
 
 		async function handleUpload<T>(attachment: {
 			attachment: string | URL | Request;

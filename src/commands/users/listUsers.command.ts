@@ -25,17 +25,23 @@ export default {
 		const discordService = DiscordService.getInstance();
 		const userService = UserService.getInstance();
 
-		discordService.checkPermission(
+		let terminate = false;
+
+		await discordService.checkPermission(
 			interaction as Interaction,
 			(interaction) => {
-				(interaction as any).reply({
+				(interaction as any).editReply({
 					content: "You are not authorized to use this command!",
 					ephemeral: true,
 				});
-				return;
+				terminate = true;
 			},
 			true,
 		);
+
+		if (terminate) {
+			return;
+		}
 
 		const users = await userService.getUsers();
 
